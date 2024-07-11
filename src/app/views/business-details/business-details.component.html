@@ -1,0 +1,29 @@
+<div class="container">
+    <img [src]="business?.imageUrl" [alt]="business?.name" class="business-image">
+  
+    <div class="row">
+      <div class="col-md-11">
+        <h2>{{business?.name}} </h2>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-6">
+        <div> {{business?.description}}</div>
+        <div></div>
+        <div> {{business?.services}}</div>
+        <div><strong>Contact: </strong> {{business?.contactNumber}}</div>
+        <div><strong>Website: </strong> {{business?.website}}</div>
+        <div><strong>Insta: </strong> {{business?.instaLink}}</div>
+        <div><strong>Review: </strong> {{business?.review}}</div>
+      </div>
+      <div class="col-md-6">
+        <address>
+          <strong>Address:</strong><br />
+          {{business?.location?.address}}<br />
+          {{business?.location?.city}}, {{business?.location?.country}}
+        </address>
+      </div>
+   
+    </div>
+  </div>
