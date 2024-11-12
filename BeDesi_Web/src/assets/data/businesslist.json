@@ -1,0 +1,21 @@
+[
+    {
+      "id": 1,
+      "name": "Khalbatta",
+      "shortDescription": "Home Caterier",
+      "description": "Khalbatta Catering is a family-owned home catering service dedicated to making your gatherings unforgettable with our delicious, homemade meals and exceptional service.",
+      "imageUrl": "/assets/images/thumbnails/1.thumbnail_01.jpg",
+      "contactNumber": 7878787878,
+      "website": "www.khalbatta.com",
+      "instaLink": "www.instagarm.com/khalbatta",
+      "services": ["HomeCaterier", "PartyOrders"],
+      "review": 5,
+      "reviewCount": 150,
+      "location": {
+        "address": "HA1 1PA",
+        "city": "London",
+        "country": "England"
+      },
+      "serviceArea": ["HA1"]
+    }
+  ]

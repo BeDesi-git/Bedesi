@@ -1,0 +1,26 @@
+<!--<div [routerLink]="['/business', localbusiness.id]" class="well hoverwell thumbnail">-->
+<div class="well hoverwell thumbnail">
+  <h2>{{localbusiness.name}}</h2>
+  <div class="row">
+    <div class="col-md-2">
+      <img [src]="localbusiness.imageUrl" [alt]="localbusiness.name" class="business-image">
+    </div>
+    <div class="col-md-5">
+      <div>{{localbusiness.description}}</div>
+      <div>{{localbusiness.contactNumber}}</div>
+      <div>{{localbusiness.website}}</div>
+      <div>{{localbusiness.instaHandle}}</div>
+      <div>{{localbusiness.facebook}}</div>
+    </div>
+  </div>
+</div>
+<!-- 
+Logo Image
+Name
+Details
+contact Number
+website
+insta
+FB
+Postcode
+review -->

@@ -1,0 +1,26 @@
+
+<div id="searchForm" class="navbar-center">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Service" #searchFilter>
+    </div>
+    <div class="col-md-2">
+      <area-autocomplete (optionSelected)='onLocationSelected($event)'></area-autocomplete>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-default" (click)="searchBusiness(searchFilter.value)">
+        Search
+      </button>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+ </div>
+
+<div>
+  <hr />
+  <business-thumbnail *ngFor="let localbusiness of businessList"
+                      [localbusiness]="localbusiness"></business-thumbnail>
+</div>
+
+
