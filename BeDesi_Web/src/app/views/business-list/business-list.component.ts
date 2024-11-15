@@ -27,11 +27,11 @@ export class BusinessListComponent {
           let filteredBusinesses = data.result;
 
           filteredBusinesses.forEach((business: Business) => {
-            if(business.hasLogo){
+            if(business.hasLogo == 'Y'){
               business.imageUrl = 'assets/images/thumbnails/thumbnail_'+ business.businessId +'.jpg';
             }
             else{
-              business.imageUrl = 'assets/images/thumbnails/default.jpg';
+              business.imageUrl = 'assets/images/thumbnails/default.png';
             }
           });
           this.businessList = filteredBusinesses;

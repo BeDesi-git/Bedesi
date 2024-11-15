@@ -19,7 +19,7 @@ namespace BeDesi.Core.Repository
             // SQL query with parameters
             string query = "SELECT business_id, name, address, postcode, description, contact_number, website, insta_handle, facebook, has_logo " +
                            "FROM bds_business " +
-                           "WHERE keywords LIKE @keywords AND serves_postcode LIKE @postcode";
+                           "WHERE keywords LIKE @keywords AND (serves_postcode LIKE @postcode OR serves_postcode LIKE '%online%')";
 
             // Using SqlConnection to connect to the database
             using (SqlConnection connection = new SqlConnection(_connectionString))

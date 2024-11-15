@@ -11,8 +11,6 @@ export class BusinessService {
   constructor(private http: HttpClient) { }
 
   searchBusinesses(keywords: string, location: string): Observable<any> {
-    keywords = 'food';
-    location = 'HA1';
     let rid = 'BusinessSearchRequest';
     let params = new HttpParams()
                 .set('keywords', keywords)
