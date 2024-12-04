@@ -8,10 +8,18 @@
     <div class="col-md-5">
       <div>{{localbusiness.description}}</div>
       <div>{{localbusiness.contactNumber}}</div>
-      <div>{{localbusiness.website}}</div>
-      <div>{{localbusiness.instaHandle}}</div>
-      <div>{{localbusiness.facebook}}</div>
-    </div>
+      <div >
+        <span *ngIf="localbusiness.website" >
+          <button class="btn btn-social" (click)="openLink(localbusiness.website)">Website</button>
+        </span>
+        <span  *ngIf="localbusiness.instaHandle" >
+          <button class="btn btn-social" (click)="openLink(localbusiness.instaHandle)">Insta</button>
+        </span>
+        <span  *ngIf="localbusiness.facebook" >
+          <button class="btn btn-social" (click)="openLink(localbusiness.facebook)">Facebook</button>
+        </span>
+      </div>
+</div>
   </div>
 </div>
 <!-- 

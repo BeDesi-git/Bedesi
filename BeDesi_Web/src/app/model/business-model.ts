@@ -15,3 +15,4 @@ export class Business {
     keywords?: string;
     ratings?: number;
 };
+

@@ -9,7 +9,7 @@ namespace BeDesiAPI.Controllers
     [Route("api/[controller]")]
     public class LocationController : ControllerBase
     {
-        private static readonly BeDesi.Core.Helpers.ILogger log = LogProvider.GetLogger("LocationListService");
+        private static readonly BeDesi.Core.Helpers.ILogger log = LogProvider.GetLogger("LocationController");
         private ILocationService _service;
         public LocationController(ILocationService locationService)
         {

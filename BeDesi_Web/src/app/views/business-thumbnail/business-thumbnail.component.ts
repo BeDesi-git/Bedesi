@@ -9,4 +9,9 @@ import {Component, Input} from '@angular/core'
 })
 export class BusinessThumbnailComponent{
     @Input() localbusiness:any
+
+  openLink(url: string): void {
+    window.open(url, '_blank', 'noopener noreferrer');
+  }
 }
+

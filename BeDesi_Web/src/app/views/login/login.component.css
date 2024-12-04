@@ -1,0 +1,77 @@
+.login-form {
+  max-width: 400px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+mat-card {
+  padding: 20px;
+}
+
+mat-card-header {
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field mat-label {
+  font-size: 1rem;
+}
+
+.mat-icon-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.forgot-password {
+  text-align: right;
+}
+
+.forgot-password a {
+  color: #1976d2;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+.register-option {
+  text-align: center;
+  font-size: 14px; /* Uniform font size */
+  line-height: 1.5; /* Consistent line height for alignment */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Add spacing between the text and link */
+}
+
+.register-option span {
+  color: #c3c1c1; /* Slightly darker text for visibility */
+  font-weight: 500;
+}
+
+.register-option a {
+  font-weight: 600; /* Bold the link for emphasis */
+  color: #3f51b5; /* Primary color for the link */
+  text-decoration: none;
+}
+
+.register-option a:hover {
+  text-decoration: underline; /* Add underline on hover */
+}

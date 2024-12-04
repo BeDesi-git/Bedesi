@@ -1,0 +1,23 @@
+.register-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.account-info {
+  margin-top: 20px;
+  text-align: center;
+}
+
+  .account-info span {
+    margin-right: 5px;
+  }
+
+.password-section-title {
+  margin: 20px 0 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+}

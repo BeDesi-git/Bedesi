@@ -1,6 +1,8 @@
-﻿using System.Data.SqlClient;
+﻿using System.Configuration;
+using System.Data.SqlClient;
 using BeDesi.Core.Models;
 using BeDesi.Core.Repository.Contracts;
+using Microsoft.Extensions.Configuration;
 
 
 namespace BeDesi.Core.Repository
@@ -8,9 +10,9 @@ namespace BeDesi.Core.Repository
     public class BusinessRepository : BaseRepository, IBusinessRepository
     {
         private readonly string _connectionString;
-        public BusinessRepository(string connectionString)
+        public BusinessRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;   
+            _connectionString = configuration["ConnectionStrings:BeDesiDB"];
         }
         public async Task<IEnumerable<Business>> GetBusinessListAsync(SearchBusinessRequest param)
         {

@@ -1,0 +1,71 @@
+<form (ngSubmit)="onSubmit()" class="register-form" #updateProfileForm="ngForm">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Update Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Name Input -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="name"
+               name="name"
+               placeholder="Enter your name"
+               required />
+      </mat-form-field>
+
+      <!-- Email Input (Read-Only) -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput
+               type="email"
+               [(ngModel)]="email"
+               name="email"
+               [readonly]="true" />
+      </mat-form-field>
+
+      <!-- Contact Number -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contact Number</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="contactNumber"
+               name="contactNumber"
+               placeholder="Enter your contact number" />
+      </mat-form-field>
+
+      <!-- Change Password Section -->
+      <h3 class="password-section-title">Change Password</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>New Password</mat-label>
+        <input matInput
+               type="password"
+               [(ngModel)]="newPassword"
+               name="newPassword"
+               placeholder="Enter new password" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirm New Password</mat-label>
+        <input matInput
+               type="password"
+               [(ngModel)]="confirmPassword"
+               name="confirmPassword"
+               placeholder="Confirm new password" />
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <!-- Save Button -->
+      <button mat-raised-button color="accent" type="submit" class="full-width"
+              [disabled]="updateProfileForm.invalid">
+        Save Changes
+      </button>
+    </mat-card-actions>
+
+    <!-- Back to Dashboard Link -->
+    <div class="account-info">
+      <span>Changed your mind?</span>
+      <a [routerLink]="['/business']">Cancel</a>
+    </div>
+  </mat-card>
+</form>

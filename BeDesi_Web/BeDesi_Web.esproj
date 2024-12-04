@@ -11,5 +11,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\app\views\area-autocomplete\" />
+    <Folder Include="src\app\views\login\" />
+    <Folder Include="src\app\views\forgot-password\" />
+    <Folder Include="src\app\views\update-profile\" />
+    <Folder Include="src\app\views\reset-password\" />
   </ItemGroup>
 </Project>

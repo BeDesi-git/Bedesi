@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationService {
-  private apiUrl = 'https://localhost:7275/api/Location';
+  private apiUrl = environment.apiBaseUrl + '/Location';
 
   constructor(private http: HttpClient) {}
 

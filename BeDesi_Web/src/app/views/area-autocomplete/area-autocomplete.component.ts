@@ -47,6 +47,7 @@ export class AreaAutocomplete implements OnInit {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => {
+        this.emitValue(value);
         return value ? this._filter(value) : this.options.slice();
       }),
     );
@@ -74,6 +75,10 @@ export class AreaAutocomplete implements OnInit {
 
   onOptionSelected(event: any) {
     const selectedOption = event.option.value;
-    this.optionSelected.emit(selectedOption);
+    this.emitValue(selectedOption);
+  }
+
+  private emitValue(selectedValue:any) {
+    this.optionSelected.emit(selectedValue);
   }
 }

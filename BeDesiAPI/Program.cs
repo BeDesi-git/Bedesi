@@ -1,18 +1,27 @@
+using BeDesi.Core.Models;
 using BeDesi.Core.Repository;
 using BeDesi.Core.Repository.Contracts;
 using BeDesi.Core.Services;
 using BeDesi.Core.Services.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+// Configure JWT authentication
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
 
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 
 builder.Services.AddCors(options =>
 {
@@ -23,16 +32,31 @@ builder.Services.AddCors(options =>
         );
 });
 
-
-// Read the connection string from appsettings.json
-string connectionString = builder.Configuration.GetConnectionString("BeDesiDB");
-
-
-builder.Services.AddSingleton<IBusinessRepository>(provider => new BusinessRepository(connectionString));
-builder.Services.AddSingleton<ILocationRepository>(provider => new LocationRepository(connectionString));
+builder.Services.AddSingleton<IBusinessRepository, BusinessRepository>();
+builder.Services.AddSingleton<ILocationRepository, LocationRepository>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 builder.Services.AddSingleton<IBusinessService, BusinessService>();
 builder.Services.AddSingleton<ILocationService, LocationService>();
+builder.Services.AddSingleton<IAuthService, AuthService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

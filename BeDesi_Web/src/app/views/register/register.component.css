@@ -1,0 +1,49 @@
+.register-form {
+  max-width: 400px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+mat-card {
+  padding: 20px;
+}
+
+mat-card-header {
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.account-info {
+  text-align: center;
+  font-size: 14px; /* Uniform font size */
+  line-height: 1.5; /* Consistent line height for alignment */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Add spacing between the text and link */
+}
+
+  .account-info span {
+    color: #c3c1c1; /* Slightly darker text for visibility */
+    font-weight: 500;
+  }
+
+  .account-info a {
+    font-weight: 600; /* Bold the link for emphasis */
+    color: #3f51b5; /* Primary color for the link */
+    text-decoration: none;
+  }
+
+    .account-info a:hover {
+      text-decoration: underline; /* Add underline on hover */
+    }

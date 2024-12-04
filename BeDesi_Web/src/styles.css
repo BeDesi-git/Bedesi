@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 .hoverwell:hover {
   background-color: #485563;
-  cursor: pointer;
 }
 
 .container {
@@ -35,6 +34,21 @@ button {
 .toast-warning {
   background-color: #f89406;
 }
-
-html, body { height: 100%; }
+.btn-social {
+    margin-top:5px;
+  color: #ffffff;
+  background-color: #808080;
+  border-color: transparent;
+}
+.btn-social-hover {
+  margin-top: 5px;
+  color: #ffffff;
+  background-color: #000000;
+  border-color: transparent;
+}
+html, body {
+  height: 100%;
+}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+

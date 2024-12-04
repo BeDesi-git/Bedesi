@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
-using System.Linq;
 using BeDesi.Core.Models;
 using BeDesi.Core.Repository.Contracts;
+using Microsoft.Extensions.Configuration;
 
 
 namespace BeDesi.Core.Repository
@@ -12,9 +12,9 @@ namespace BeDesi.Core.Repository
         private  List<string> _locations;
         private List<Location> _locationDetails;
 
-        public LocationRepository(string connectionString)
+        public LocationRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _connectionString = configuration["ConnectionStrings:BeDesiDB"];
             _locations = new List<string>();
             _locationDetails = new List<Location>();
         }

@@ -1,0 +1,40 @@
+/* Navbar container styles */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px;
+  background-color: #d0cfca; /* Cream color */
+  color: black; /* Text color for better contrast */
+}
+
+/* Brand Text Styles */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #742f2f;
+  font-size: 2.5rem; /* Slightly larger text for branding */
+  font-weight: bold;
+}
+
+/* Spacer to push items to the right */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Right-side links */
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-link {
+  color: black;
+  margin-left: 16px;
+}
+
+.user-menu-btn {
+  color: black;
+}

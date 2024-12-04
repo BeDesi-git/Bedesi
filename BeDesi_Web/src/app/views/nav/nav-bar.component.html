@@ -1,34 +1,43 @@
-<div class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a [routerLink]="['/business']" class="navbar-brand">BeDesi</a>
-    </div>
+<mat-toolbar color="primary" class="navbar">
+  <!-- Navbar Brand with Text -->
+  <a [routerLink]="['/business']" class="navbar-brand">
+    <span class="mat-toolbar-title">BeDesi</span>
+  </a>
 
-    <div class="collapse navbar-collapse">
-      <!-- <ul class="nav navbar-nav">
-        <li>
-          <a >All Events</a>
-        </li>
-        <li><a href="">Create Event</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
-            Events
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li >
-              <a href="">Angular Connect</a>
-            </li>
-          </ul>
-        </li>
-      </ul> -->
-      <div class="navbar-header navbar-right">
-        <ul class="nav navbar-nav">
-          <li>
-            <a>Add your Business</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+
+
+  <!-- Spacer to push items to the right -->
+  <span class="spacer"></span>
+
+  <!-- Navbar Links -->
+  <div class="navbar-links">
+
+    <!-- Search -->
+    <ng-container>
+      <a mat-button [routerLink]="['/business']" class="navbar-link">Search</a>
+    </ng-container>
+
+    <!-- Add a Business (Visible when logged in) -->
+    <ng-container *ngIf="isLoggedIn">
+      <a mat-button [routerLink]="['/add-business']" class="navbar-link">
+        Add a Business
+      </a>
+    </ng-container>
+
+    <!-- Sign Up Link (Visible when not logged in) -->
+    <ng-container *ngIf="!isLoggedIn; else userMenu">
+      <a mat-button [routerLink]="['/login']" class="navbar-link">Sign In</a>
+    </ng-container>
+
+    <!-- Dropdown Menu for Logged-In User -->
+    <ng-template #userMenu>
+      <button mat-button [matMenuTriggerFor]="menu" class="user-menu-btn navbar-link">
+        {{ username }}
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="['/update-profile']">Profile Update</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </ng-template>
   </div>
-</div>
+</mat-toolbar>
