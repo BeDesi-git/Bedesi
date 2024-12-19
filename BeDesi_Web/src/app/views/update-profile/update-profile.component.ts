@@ -22,16 +22,15 @@ export class UpdateProfileComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    // Check if the user is logged in
     this.authService.isLoggedIn().subscribe({
       next: (isLoggedIn) => {
         if (!isLoggedIn) {
           this.router.navigate(['/login']); // Redirect to login page if not logged in
           return;
         }
-        let token = localStorage.getItem('token') || ''
+        
         // Load user details
-        this.loadUserProfile(token);
+        this.loadUserProfile();
       },
       error: (err) => {
         console.error('Error checking login status', err);
@@ -40,8 +39,8 @@ export class UpdateProfileComponent implements OnInit {
     });
   }
 
-  private loadUserProfile(token: string) {
-    this.userProfileService.getUserProfile(token).subscribe({
+  private loadUserProfile() {
+    this.userProfileService.getUserProfile().subscribe({
       next: (response) => {
         if (response.result) {
           this.name = response.result.name;

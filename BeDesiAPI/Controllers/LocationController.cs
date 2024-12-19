@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BeDesi.Core.Helpers;
 using BeDesi.Core.Services.Contracts;
+using BeDesi.Core.Models.Requests;
 
 namespace BeDesiAPI.Controllers
 {

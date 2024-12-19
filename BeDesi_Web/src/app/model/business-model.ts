@@ -1,18 +1,21 @@
 
 export class Business {
-    businessId?: number;
-    name?: string;
+    businessId: number = 0;
+    name: string = '';
+    address: string = '';
+    postcode: string = '';
     description?: string;
-    imageUrl?: string;
-    contactNumber?: string;
-    website?: string;
-    instaHandle?: string;
-    facebook?: string;
-    hasLogo?: string;
-    address?: string;
-    postcode?: string;
-    servesPostcode?: string;
-    keywords?: string;
-    ratings?: number;
+    contactNumber: string = '';
+    email?: string;
+    website?: string = '';
+    imageUrl?: string = '';
+    instaHandle?: string = '';
+    facebook?: string = '';
+    hasLogo?: string = 'N';
+    servesPostcodes: string[] = [];
+    keywords: string[] = [];
+    isActive: string = 'N';
+    ratings?: number = 0;
 };
+
 

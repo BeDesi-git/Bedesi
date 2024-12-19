@@ -17,13 +17,6 @@
       <a mat-button [routerLink]="['/business']" class="navbar-link">Search</a>
     </ng-container>
 
-    <!-- Add a Business (Visible when logged in) -->
-    <ng-container *ngIf="isLoggedIn">
-      <a mat-button [routerLink]="['/add-business']" class="navbar-link">
-        Add a Business
-      </a>
-    </ng-container>
-
     <!-- Sign Up Link (Visible when not logged in) -->
     <ng-container *ngIf="!isLoggedIn; else userMenu">
       <a mat-button [routerLink]="['/login']" class="navbar-link">Sign In</a>
@@ -36,6 +29,7 @@
       </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item [routerLink]="['/update-profile']">Profile Update</button>
+        <button mat-menu-item [routerLink]="['/manage-business']">Manage Your Business</button>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </ng-template>

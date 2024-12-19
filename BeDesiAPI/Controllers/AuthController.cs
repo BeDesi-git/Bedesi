@@ -1,13 +1,8 @@
 ﻿using BeDesi.Core.Helpers;
 using BeDesi.Core.Models;
-using BeDesi.Core.Repository.Contracts;
-using BeDesi.Core.Services;
+using BeDesi.Core.Models.Requests;
 using BeDesi.Core.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace BeDesiAPI.Controllers
 {
@@ -37,7 +32,7 @@ namespace BeDesiAPI.Controllers
                 }
                 if (param == null)
                 {
-                    return ResponseFactory.CreateFailedResponse<bool>(ErrorCode.ParameterMissing, "Server is expecting {param} of type LocationRequest");
+                    return ResponseFactory.CreateFailedResponse<bool>(ErrorCode.ParameterMissing, "Server is expecting {param} of type Register Request");
                 }
                 rid = param.RID;
                 var response = await _service.RegisterUser(param);
@@ -153,3 +148,5 @@ namespace BeDesiAPI.Controllers
         }
     }
 }
+
+

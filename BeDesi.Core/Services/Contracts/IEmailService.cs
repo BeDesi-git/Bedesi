@@ -1,4 +1,4 @@
-﻿namespace BeDesi.Core.Repository.Contracts
+﻿namespace BeDesi.Core.Services.Contracts
 {
     public interface IEmailService
     {

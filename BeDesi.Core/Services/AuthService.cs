@@ -1,4 +1,5 @@
 ﻿using BeDesi.Core.Models;
+using BeDesi.Core.Models.Requests;
 using BeDesi.Core.Repository.Contracts;
 using BeDesi.Core.Services.Contracts;
 using Microsoft.Extensions.Configuration;
@@ -183,6 +184,7 @@ namespace BeDesi.Core.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim("username", user.Name),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Role, user.Role)
             };

@@ -15,5 +15,12 @@ namespace BeDesi.Core.Repository
 
             return reader.GetString(columnNum);
         }
+
+        public bool ReadDbNullBoolSafely(SqlDataReader reader, int columnNum)
+        {
+            if (reader.IsDBNull(columnNum))
+                return false;
+            return reader.GetString(columnNum) == "Y" ? true : false; 
+        }
     }
 }

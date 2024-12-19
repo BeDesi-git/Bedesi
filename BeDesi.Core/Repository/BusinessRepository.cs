@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using BeDesi.Core.Models;
 using BeDesi.Core.Repository.Contracts;
 using Microsoft.Extensions.Configuration;
@@ -19,9 +18,9 @@ namespace BeDesi.Core.Repository
             var businesses = new List<Business>();
 
             // SQL query with parameters
-            string query = "SELECT business_id, name, address, postcode, description, contact_number, website, insta_handle, facebook, has_logo " +
+            string query = "SELECT business_id, name, address, postcode, description, contact_number, email, website, insta_handle, facebook, has_logo, is_active " +
                            "FROM bds_business " +
-                           "WHERE keywords LIKE @keywords AND (serves_postcode LIKE @postcode OR serves_postcode LIKE '%online%')";
+                           "WHERE is_active = 'Y' and  keywords LIKE @keywords AND (serves_postcode LIKE @postcode OR serves_postcode LIKE '%online%')";
 
             // Using SqlConnection to connect to the database
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -51,9 +50,10 @@ namespace BeDesi.Core.Repository
                                 Description = ReadDbNullStringSafely(reader, 4),  // Assuming description is third
                                 ContactNumber = ReadDbNullStringSafely(reader, 5),
                                 Website = ReadDbNullStringSafely(reader, 6),
-                                InstaHandle = ReadDbNullStringSafely(reader, 7),
-                                Facebook = ReadDbNullStringSafely(reader, 8),
-                                HasLogo = ReadDbNullStringSafely(reader, 9)
+                                Email = ReadDbNullStringSafely(reader,7),
+                                InstaHandle = ReadDbNullStringSafely(reader, 8),
+                                Facebook = ReadDbNullStringSafely(reader, 9),
+                                HasLogo = ReadDbNullBoolSafely(reader, 10)
                             };
 
                             businesses.Add(business); // Add to the list
@@ -64,5 +64,149 @@ namespace BeDesi.Core.Repository
 
             return businesses;  // Return the list of businesses
         }
+
+        public async Task<int> AddBusiness(Business newBusiness)
+        {
+            string query = @"
+        INSERT INTO bds_business
+            (name, address, postcode, description, contact_number, email, website,
+             insta_handle, facebook, has_logo, serves_postcode, keywords, 
+             points, owner_id, is_active, created_at) 
+        OUTPUT INSERTED.business_id
+        VALUES
+            (@name, @address, @postcode, @description, @contact_number, @email,
+             @website, @insta_handle, @facebook, @has_logo, @serves_postcode, 
+             @keywords, @points, @owner_id, @is_active, @created_at)";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@name", newBusiness.Name ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@address", newBusiness.Address ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@postcode", newBusiness.Postcode ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@description", newBusiness.Description ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@contact_number", newBusiness.ContactNumber ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@email", newBusiness.ContactNumber ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@website", newBusiness.Website ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@insta_handle", newBusiness.InstaHandle ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@facebook", newBusiness.Facebook ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@has_logo", newBusiness.HasLogo ? "Y" : "N");
+                    command.Parameters.AddWithValue("@serves_postcode", string.Join(";", newBusiness.ServesPostcodes) ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@keywords", string.Join(";", newBusiness.Keywords) ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@points", newBusiness.Points);
+                    command.Parameters.AddWithValue("@owner_id", newBusiness.OwnerId);
+                    command.Parameters.AddWithValue("@is_active", newBusiness.IsActive ? "Y" : "N");
+                    command.Parameters.AddWithValue("@created_at", newBusiness.CreatedAt);
+
+                    // Execute the query and get the returned ID
+                    int businessId = (int)await command.ExecuteScalarAsync();
+                    return businessId;
+                }
+            }
+        }
+        public async Task<bool> UpdateBusiness(Business updateBusiness)
+        {
+            string query = @"
+                            UPDATE bds_business
+                            SET 
+                                name = @name,
+                                address = @address,
+                                postcode = @postcode,
+                                description = @description,
+                                contact_number = @contact_number,
+                                email = @email,
+                                website = @website,
+                                insta_handle = @insta_handle,
+                                facebook = @facebook,
+                                has_logo = @has_logo,
+                                serves_postcode = @serves_postcode,
+                                keywords = @keywords,
+                                points = @points,
+                                is_active = @is_active
+                            WHERE 
+                                business_id = @business_id";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@name", updateBusiness.Name ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@address", updateBusiness.Address ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@postcode", updateBusiness.Postcode ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@description", updateBusiness.Description ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@contact_number", updateBusiness.ContactNumber ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@email", updateBusiness.Email ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@website", updateBusiness.Website ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@insta_handle", updateBusiness.InstaHandle ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@facebook", updateBusiness.Facebook ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@has_logo", updateBusiness.HasLogo ? "Y" : "N");
+                    command.Parameters.AddWithValue("@serves_postcode", string.Join(";", updateBusiness.ServesPostcodes) ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@keywords", string.Join(";", updateBusiness.Keywords) ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@points", updateBusiness.Points);
+                    command.Parameters.AddWithValue("@is_active", updateBusiness.IsActive ? "Y" : "N");
+                    command.Parameters.AddWithValue("@business_id", updateBusiness.BusinessId);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+        public async Task<List<Business>> GetBusinessByOwnerId(int ownerId)
+        {
+            string query = @"
+            SELECT 
+                business_id, name, address, postcode, description, contact_number, email,
+                website, insta_handle, facebook, has_logo, serves_postcode, keywords, 
+                points, owner_id, is_active, created_at
+            FROM bds_business
+            WHERE owner_id = @owner_id";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@owner_id", ownerId);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        List<Business> businesses = new List<Business>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            businesses.Add(new Business
+                            {
+                                BusinessId = reader.GetInt32(0),
+                                Name = reader.GetString(1),
+                                Address = reader.GetString(2),
+                                Postcode = reader.GetString(3),
+                                Description = reader.GetString(4),
+                                ContactNumber = reader.GetString(5),
+                                Email = reader.GetString(6),
+                                Website = reader.GetString(7),
+                                InstaHandle = reader.GetString(8),
+                                Facebook = reader.GetString(9),
+                                HasLogo = reader.GetString(10) == "Y" ? true : false,
+                                ServesPostcodes = reader.GetString(11).Split(';').ToList(),
+                                Keywords = reader.GetString(12).Split(';').ToList(),
+                                Points = reader.GetInt32(13),
+                                OwnerId = reader.GetInt32(14),
+                                IsActive = reader.GetString(15) == "Y" ? true : false//,
+                                //CreatedAt = DateTime.Parse(reader.GetString(16))
+                            });
+                        }
+
+                        return businesses;
+                    }
+                }
+            }
+        }
+
     }
 }

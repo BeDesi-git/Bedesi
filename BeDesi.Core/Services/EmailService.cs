@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Options;
 using System.Net.Mail;
 using System.Net;
-using BeDesi.Core.Repository.Contracts;
+using BeDesi.Core.Services.Contracts;
 
-namespace BeDesi.Core.Repository
+namespace BeDesi.Core.Services
 {
     public class EmailService : IEmailService
     {

@@ -3,7 +3,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class BusinessService {
 
   private apiUrl = environment.apiBaseUrl + '/Business';

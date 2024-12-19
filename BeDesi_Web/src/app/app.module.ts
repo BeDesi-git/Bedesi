@@ -15,19 +15,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { BusinessService } from './services/business.service';
-import { LocationService } from './services/location.service';
 import { AreaAutocomplete } from './views/area-autocomplete/area-autocomplete.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { ForgotPasswordComponent } from './views/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
 import { UpdateProfileComponent } from './views/update-profile/update-profile.component';
+import { ManageBusinessComponent } from './views/manage-business/manage-business.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select'; 
+import { MatOptionModule } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 
@@ -42,7 +44,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     NavBarComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    UpdateProfileComponent
+    UpdateProfileComponent,
+    ManageBusinessComponent
   ],
   imports: [
     BrowserModule,
@@ -60,9 +63,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatAutocompleteModule
   ],
-  providers: [BusinessService, LocationService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

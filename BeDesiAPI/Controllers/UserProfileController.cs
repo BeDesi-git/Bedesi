@@ -4,6 +4,7 @@ using System.Security.Claims;
 using BeDesi.Core.Services.Contracts;
 using BeDesi.Core.Helpers;
 using BeDesi.Core.Models;
+using BeDesi.Core.Models.Requests;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -1,0 +1,160 @@
+<form (ngSubmit)="onSubmit(manageBusinessForm)" class="manage-business-form" #manageBusinessForm="ngForm">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Manage a Business</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Business Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Business Name</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="business.name"
+               name="name"
+               placeholder="Enter business name"
+               required />
+      </mat-form-field>
+
+      <!-- Address -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Address</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="business.address"
+               name="address"
+               placeholder="Enter business address"
+               required />
+      </mat-form-field>
+
+      <!-- Postcode -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Postcode</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="business.postcode"
+               name="postcode"
+               placeholder="Enter business postcode"
+               required
+               pattern="[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}"
+               #postcode="ngModel"
+               (blur)="getServesPostcodes()" />
+        <mat-error *ngIf="postcode.invalid && postcode.touched">
+          Enter a valid UK postcode.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Radius Dropdown -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Service Radius</mat-label>
+        <mat-select [(ngModel)]="businessArea.radius" name="radius" (ngModelChange)="getServesPostcodes()">
+          <mat-option [value]="5">5 miles</mat-option>
+          <mat-option [value]="10">10 miles</mat-option>
+          <mat-option [value]="15">15 miles</mat-option>
+          <mat-option [value]="100">Online</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Description -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput
+                  [(ngModel)]="business.description"
+                  name="description"
+                  rows="4"
+                  maxlength="2000"
+                  placeholder="Describe the services, history, and specialties of your business."
+                  required></textarea>
+        <mat-hint align="end">{{ business.description?.length || 0 }}/2000</mat-hint>
+      </mat-form-field>
+
+      <!-- Contact Number -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Business Contact Number</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="business.contactNumber"
+               name="contactNumber"
+               placeholder="Enter business contact number"
+               required
+               pattern="^(?:0|\+44)[1-9]\d{8,9}$"
+               #contactNumber="ngModel" />
+        <mat-error *ngIf="contactNumber.invalid && contactNumber.touched">
+          Enter a valid UK phone number.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Email Input -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput
+               type="email"
+               [(ngModel)]="business.email"
+               name="email"
+               #emailControl="ngModel"
+               placeholder="Enter business email"
+               email/>
+        <mat-error *ngIf="emailControl.invalid && emailControl.touched">
+          <span *ngIf="emailControl.errors?.['email']">Enter a valid email address.</span>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Products and Services -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Products & Services</mat-label>
+        <input matInput
+               [(ngModel)]="productInput"
+               name="productsInput"
+               (keydown.enter)="addProduct(productInput, $event)"
+               placeholder="Add products or services" />
+      </mat-form-field>
+
+      <!-- Display selected products and services -->
+      <div class="selected-products">
+        <div class="product-chip" *ngFor="let product of business.keywords">
+          <span>{{ product }}</span>
+          <button mat-icon-button color="warn" (click)="removeProduct(product)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Website -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Website</mat-label>
+        <input matInput
+               type="url"
+               [(ngModel)]="business.website"
+               name="website"
+               placeholder="Enter website URL with https" />
+      </mat-form-field>
+
+      <!-- Instagram Handle -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Instagram Handle</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="business.instaHandle"
+               name="instaHandle"
+               placeholder="Enter Instagram URL with https" />
+      </mat-form-field>
+
+      <!-- Facebook Page -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Facebook Page</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="business.facebook"
+               name="facebook"
+               placeholder="Enter Facebook URL with https" />
+      </mat-form-field>
+
+    </mat-card-content>
+    <mat-card-actions>
+      <!-- Manage Business Button -->
+      <button mat-raised-button color="accent" type="submit" class="full-width"
+              [disabled]="manageBusinessForm.invalid">
+        {{ business.businessId ? 'Update Business' : 'Add Business' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

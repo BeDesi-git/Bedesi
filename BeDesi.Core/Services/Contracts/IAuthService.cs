@@ -1,4 +1,5 @@
 ﻿using BeDesi.Core.Models;
+using BeDesi.Core.Models.Requests;
 
 namespace BeDesi.Core.Services.Contracts
 {

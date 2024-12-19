@@ -40,6 +40,7 @@ builder.Services.AddSingleton<IBusinessService, BusinessService>();
 builder.Services.AddSingleton<ILocationService, LocationService>();
 builder.Services.AddSingleton<IAuthService, AuthService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<IManageBusinessService, ManageBusinessService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -2,10 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { LoginRequest } from '../model/login-request';
-import { RegisterRequest } from '../model/register-request';
-import { ForgotPasswordRequest } from '../model/forgot-password-request';
-import { ResetPasswordRequest } from '../model/reset-password-request';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -23,12 +19,12 @@ export class AuthService {
   }
 
 
-  register(data: RegisterRequest): Observable<any> {
+  register(data: any): Observable<any> {
     data.rid = 'RegisterRequest';
     return this.http.post<any>(`${this.apiUrl}/register`, data);
   }
 
-  login(data: LoginRequest): Observable<any> {
+  login(data: any): Observable<any> {
     data.rid = 'LoginRequest';
     return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
       tap((res) => {
@@ -38,12 +34,12 @@ export class AuthService {
     );
   }
 
-  forgotPassword(data: ForgotPasswordRequest): Observable<any> {
+  forgotPassword(data: any): Observable<any> {
     data.rid = 'ForgotPasswordRequest';
     return this.http.post(`${this.apiUrl}/forgot-password`, data);
   }
 
-  resetPassword(data: ResetPasswordRequest): Observable<any> {
+  resetPassword(data: any): Observable<any> {
     data.rid = 'ResetPasswordRequest';
     return this.http.post(`${this.apiUrl}/reset-password`, data);
   }

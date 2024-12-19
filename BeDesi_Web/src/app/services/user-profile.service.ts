@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { UpdateProfileRequest } from '../model/update-profile-request';
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +12,10 @@ export class UserProfileService {
   constructor(private http: HttpClient) { }
 
 
-  getUserProfile(token: string): Observable<any> 
+  getUserProfile(): Observable<any> 
   {
     let rid = 'GetUserProfileRequest';
+    let token = localStorage.getItem('token') || ''
     let params = new HttpParams()
       .set('rid', rid)
       .set('token', token);
@@ -23,7 +23,7 @@ export class UserProfileService {
     return this.http.get(this.apiUrl + '/GetUserProfile', { params });
   }
 
-  updateUserProfile(updatedProfile: UpdateProfileRequest) {
+  updateUserProfile(updatedProfile: any) {
     updatedProfile.rid = 'UpdateProfile';
     return this.http.put(this.apiUrl + '/UpdateProfile', updatedProfile);
   }

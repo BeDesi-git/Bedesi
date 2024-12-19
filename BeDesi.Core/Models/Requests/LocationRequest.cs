@@ -1,4 +1,4 @@
-﻿namespace BeDesi.Core.Models
+﻿namespace BeDesi.Core.Models.Requests
 {
     public class LocationRequest : RequestId
     {
