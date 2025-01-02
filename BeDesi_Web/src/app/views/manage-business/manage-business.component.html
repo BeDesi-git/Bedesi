@@ -12,7 +12,10 @@
                [(ngModel)]="business.name"
                name="name"
                placeholder="Enter business name"
-               required />
+               (blur)="checkBusinessName()"
+               #businessName="ngModel"
+               required
+               [disabled]="business.businessId !== 0" />
       </mat-form-field>
 
       <!-- Address -->
@@ -34,7 +37,7 @@
                [(ngModel)]="business.postcode"
                name="postcode"
                placeholder="Enter business postcode"
-               required
+               [required]="businessArea.radius !== 100"
                pattern="[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}"
                #postcode="ngModel"
                (blur)="getServesPostcodes()" />
@@ -76,10 +79,10 @@
                name="contactNumber"
                placeholder="Enter business contact number"
                required
-               pattern="^(?:0|\+44)[1-9]\d{8,9}$"
+               pattern="^\+?[0-9\s\-()]{7,15}$"
                #contactNumber="ngModel" />
         <mat-error *ngIf="contactNumber.invalid && contactNumber.touched">
-          Enter a valid UK phone number.
+          Enter a valid phone number.
         </mat-error>
       </mat-form-field>
 
@@ -92,7 +95,7 @@
                name="email"
                #emailControl="ngModel"
                placeholder="Enter business email"
-               email/>
+               email />
         <mat-error *ngIf="emailControl.invalid && emailControl.touched">
           <span *ngIf="emailControl.errors?.['email']">Enter a valid email address.</span>
         </mat-error>
@@ -147,6 +150,11 @@
                name="facebook"
                placeholder="Enter Facebook URL with https" />
       </mat-form-field>
+
+      <!-- I Agree Checkbox -->
+      <mat-checkbox [(ngModel)]="business.agreeToShow" name="agreeToShow" [disabled]="business.businessId !== 0" required>
+        I agree to allow my business contact details to be displayed on Bedesi.co.uk
+      </mat-checkbox>
 
     </mat-card-content>
     <mat-card-actions>

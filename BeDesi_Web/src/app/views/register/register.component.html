@@ -54,6 +54,12 @@
                placeholder="Confirm your password"
                required />
       </mat-form-field>
+
+      <!-- Business Owner Checkbox -->
+      <mat-checkbox [(ngModel)]="isBusinessOwner" name="isBusinessOwner">
+        Are you a Business Owner
+      </mat-checkbox>
+
     </mat-card-content>
     <mat-card-actions>
       <!-- Register Button -->

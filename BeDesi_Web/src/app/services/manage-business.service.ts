@@ -39,4 +39,12 @@ export class ManageBusinessService {
 
     return this.http.get(this.apiUrl + '/GetUserBusiness', { params });
   }
+
+  checkBusinessName(businessName: string): Observable<any> {
+    const params = new HttpParams()
+      .set('rid', 'CheckBusinessNameRequest')
+      .set('businessName', businessName);    
+
+    return this.http.get(`${this.apiUrl}/CheckBusinessName`, { params });
+  }
 }

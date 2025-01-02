@@ -27,7 +27,7 @@ export class BusinessListComponent {
           let filteredBusinesses = data.result;
 
           filteredBusinesses.forEach((business: Business) => {
-            if(business.hasLogo == 'Y'){
+            if(business.hasLogo){
               business.imageUrl = 'assets/images/thumbnails/thumbnail_'+ business.businessId +'.jpg';
             }
             else{

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ManageBusinessService } from '../../services/manage-business.service';
 import { Business } from '../../model/business-model';
@@ -21,13 +21,15 @@ export class ManageBusinessComponent implements OnInit {
   };
   email: string = '';
   productInput: string = '';
+  isBusinessNameTaken = false;
   
   filteredSuggestions: string[] = [];
   constructor(private manageBusinessService: ManageBusinessService,
     private authService: AuthService,
     private postcodeService: PostcodeService,
     private router: Router,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef) { }
 
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class ManageBusinessComponent implements OnInit {
   private loadUserBusiness() {
     this.manageBusinessService.getUserBusiness().subscribe({
       next: (response) => {
-        if (response.result) {
+        if (response.result[0]) {
           let businessDetails = response.result[0];
           this.business.businessId = businessDetails.businessId;
           this.business.name = businessDetails.name;
@@ -68,6 +70,7 @@ export class ManageBusinessComponent implements OnInit {
           this.business.servesPostcodes = businessDetails.servesPostcodes;
           this.business.keywords = businessDetails.keywords;
           this.business.isActive = businessDetails.isActive;
+          this.business.agreeToShow = businessDetails.agreeToShow;
         }
       },
       error: () => {
@@ -75,7 +78,6 @@ export class ManageBusinessComponent implements OnInit {
       }
     });
   }
-
 
   // Add a product to the list
   addProduct(product: string, event?: Event): void {
@@ -146,8 +148,27 @@ export class ManageBusinessComponent implements OnInit {
     }
   }
 
+  checkBusinessName(): void {
+    if (!this.business.name) {
+      this.isBusinessNameTaken = false;
+      return;
+    }
+
+    this.manageBusinessService.checkBusinessName(this.business.name).subscribe({
+      next: (response) => {
+        this.isBusinessNameTaken = response.result;
+        this.cdr.detectChanges();
+        console.log('Business name taken:', this.isBusinessNameTaken);
+      },
+      error: () => {
+        console.error('Error checking business name.');
+        this.isBusinessNameTaken = false;
+      }
+    });
+  }
+
   onSubmit(form: NgForm): void {
-    if (form.valid) {
+    if (form.valid && !this.isBusinessNameTaken) {
       this.business.businessId == 0 ? this.addBusiness() : this.updateBusiness();
     } else {
       console.error('Form is invalid');

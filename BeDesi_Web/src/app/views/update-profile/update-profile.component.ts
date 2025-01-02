@@ -15,6 +15,7 @@ export class UpdateProfileComponent implements OnInit {
   contactNumber: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
+  isBusinessOwner: boolean = false;
 
   constructor(private userProfileService: UserProfileService,
     private authService: AuthService,
@@ -46,6 +47,7 @@ export class UpdateProfileComponent implements OnInit {
           this.name = response.result.name;
           this.email = response.result.email;
           this.contactNumber = response.result.contactNumber || '';
+          this.isBusinessOwner = response.result.role == "BusinessOwner";
         }
       },
       error: () => {
@@ -66,7 +68,8 @@ export class UpdateProfileComponent implements OnInit {
       email: this.email,
       name: this.name,
       contactNumber: this.contactNumber,
-      password: this.newPassword ? this.newPassword : ""
+      password: this.newPassword ? this.newPassword : "",
+      isBusinessOwner: this.isBusinessOwner
     };
 
     this.userProfileService.updateUserProfile(updatedProfile).subscribe({

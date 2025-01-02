@@ -54,6 +54,13 @@ namespace BeDesi.Core.Services
             return ResponseFactory.CreateResponse(ownerBusinesses);
         }
 
+        public async Task<ApiResponse<bool>> CheckBusinessName(CheckBusinessNameRequest request)
+        {
+
+            var businessUpdated = await _repository.CheckBusinessName(request.BusinessName);
+            return ResponseFactory.CreateResponse(businessUpdated);
+        }
+
         private int GetOwnerIdFromToken(string tokenFromRequest)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

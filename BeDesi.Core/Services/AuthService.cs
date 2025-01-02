@@ -32,7 +32,7 @@ namespace BeDesi.Core.Services
                 Name = request.Name,
                 Salt = Salt,
                 PasswordHash = HashPassword(request.Password, Salt),
-                Role = "User",
+                Role = request.IsBusinessOwner ? "BusinessOwner" : "User",
                 CreatedAt = DateTime.UtcNow,
                 isActive = true
             };
@@ -134,7 +134,7 @@ namespace BeDesi.Core.Services
             {
                 Email = request.Email,
                 Name = request.Name,
-                Role = "User",
+                Role = request.IsBusinessOwner ? "BusinessOwner" : "User",
                 ContactNumber = request.ContactNumber,
                 CreatedAt = DateTime.UtcNow,
                 isActive = true

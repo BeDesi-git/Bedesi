@@ -8,5 +8,6 @@ namespace BeDesi.Core.Services.Contracts
         Task<ApiResponse<int>> AddBusiness(ManageBusinessRequest request);
         Task<ApiResponse<bool>> UpdateBusiness(ManageBusinessRequest request);
         Task<ApiResponse<List<Business>>> GetBusinessByOwnerId(GetUsersBusinessRequest request);
+        Task<ApiResponse<bool>> CheckBusinessName(CheckBusinessNameRequest request);
     }
 }

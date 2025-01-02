@@ -11,11 +11,12 @@ export class Business {
     imageUrl?: string = '';
     instaHandle?: string = '';
     facebook?: string = '';
-    hasLogo?: string = 'N';
+    hasLogo?: boolean = false;
     servesPostcodes: string[] = [];
     keywords: string[] = [];
-    isActive: string = 'N';
+    isActive: boolean = false;
     ratings?: number = 0;
+    agreeToShow: boolean = false;
 };
 
 

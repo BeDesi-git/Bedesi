@@ -53,6 +53,12 @@
                name="confirmPassword"
                placeholder="Confirm new password" />
       </mat-form-field>
+
+      <!-- Business Owner Checkbox -->
+      <mat-checkbox [(ngModel)]="isBusinessOwner" name="isBusinessOwner">
+        Are you a Business Owner
+      </mat-checkbox>
+
     </mat-card-content>
     <mat-card-actions>
       <!-- Save Button -->

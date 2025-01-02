@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 export class NavBarComponent{
   isLoggedIn = false;
   username = '';
+  isBusinessOwner = false;
 
   constructor(private authService: AuthService) { }
 
@@ -18,7 +19,8 @@ export class NavBarComponent{
     this.authService.loggedInStatus$.subscribe((status) => {
       this.isLoggedIn = status;
       if (this.isLoggedIn) {
-        this.username = this.authService.getUsername(); // Retrieve username
+        this.username = this.authService.getUsername();
+        this.isBusinessOwner = this.authService.isUserBusinessOwner();
       }
     });
   }

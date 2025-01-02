@@ -13,6 +13,7 @@ export class RegisterComponent {
   email = '';
   password = '';
   confirmPassword = '';
+  isBusinessOwner = '';
 
   constructor(private authService: AuthService,
     private router: Router,
@@ -29,7 +30,7 @@ export class RegisterComponent {
     }
 
     this.authService
-      .register({ name: this.name, email: this.email, password: this.password })
+      .register({ name: this.name, email: this.email, password: this.password, IsBusinessOwner: this.isBusinessOwner })
       .subscribe({
         next: (res) => {
           console.log('User: ' + this.name +' registered!', res);

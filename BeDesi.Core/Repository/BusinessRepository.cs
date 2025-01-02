@@ -71,12 +71,12 @@ namespace BeDesi.Core.Repository
         INSERT INTO bds_business
             (name, address, postcode, description, contact_number, email, website,
              insta_handle, facebook, has_logo, serves_postcode, keywords, 
-             points, owner_id, is_active, created_at) 
+             points, owner_id, is_active, agree_to_show, created_at) 
         OUTPUT INSERTED.business_id
         VALUES
             (@name, @address, @postcode, @description, @contact_number, @email,
              @website, @insta_handle, @facebook, @has_logo, @serves_postcode, 
-             @keywords, @points, @owner_id, @is_active, @created_at)";
+             @keywords, @points, @owner_id, @is_active, @agree_to_show, @created_at)";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -89,7 +89,7 @@ namespace BeDesi.Core.Repository
                     command.Parameters.AddWithValue("@postcode", newBusiness.Postcode ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@description", newBusiness.Description ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@contact_number", newBusiness.ContactNumber ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@email", newBusiness.ContactNumber ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@email", newBusiness.Email ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@website", newBusiness.Website ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@insta_handle", newBusiness.InstaHandle ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@facebook", newBusiness.Facebook ?? (object)DBNull.Value);
@@ -99,6 +99,7 @@ namespace BeDesi.Core.Repository
                     command.Parameters.AddWithValue("@points", newBusiness.Points);
                     command.Parameters.AddWithValue("@owner_id", newBusiness.OwnerId);
                     command.Parameters.AddWithValue("@is_active", newBusiness.IsActive ? "Y" : "N");
+                    command.Parameters.AddWithValue("@agree_to_show", newBusiness.AgreeToShow ? "Y" : "N");
                     command.Parameters.AddWithValue("@created_at", newBusiness.CreatedAt);
 
                     // Execute the query and get the returned ID
@@ -162,7 +163,7 @@ namespace BeDesi.Core.Repository
             SELECT 
                 business_id, name, address, postcode, description, contact_number, email,
                 website, insta_handle, facebook, has_logo, serves_postcode, keywords, 
-                points, owner_id, is_active, created_at
+                points, owner_id, is_active, agree_to_show, created_at
             FROM bds_business
             WHERE owner_id = @owner_id";
 
@@ -197,8 +198,9 @@ namespace BeDesi.Core.Repository
                                 Keywords = reader.GetString(12).Split(';').ToList(),
                                 Points = reader.GetInt32(13),
                                 OwnerId = reader.GetInt32(14),
-                                IsActive = reader.GetString(15) == "Y" ? true : false//,
-                                //CreatedAt = DateTime.Parse(reader.GetString(16))
+                                IsActive = reader.GetString(15) == "Y" ? true : false,
+                                AgreeToShow = reader.GetString(16) == "Y" ? true : false//,
+                                //CreatedAt = DateTime.Parse(reader.GetString(17))
                             });
                         }
 
@@ -207,6 +209,29 @@ namespace BeDesi.Core.Repository
                 }
             }
         }
+
+        public async Task<bool> CheckBusinessName(string businessName)
+        {
+            string query = @"
+                            SELECT COUNT(1)
+                            FROM bds_business
+                            WHERE LOWER(name) = LOWER(@name)";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@name", businessName ?? (object)DBNull.Value);
+
+                    // Execute the query and return whether the count is greater than 0
+                    int count = (int)await command.ExecuteScalarAsync();
+                    return count > 0;
+                }
+            }
+        }
+
 
     }
 }

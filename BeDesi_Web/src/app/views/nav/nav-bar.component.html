@@ -29,7 +29,9 @@
       </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item [routerLink]="['/update-profile']">Profile Update</button>
-        <button mat-menu-item [routerLink]="['/manage-business']">Manage Your Business</button>
+        <button mat-menu-item *ngIf="isBusinessOwner" [routerLink]="['/manage-business']">
+          Manage Your Business
+        </button>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </ng-template>

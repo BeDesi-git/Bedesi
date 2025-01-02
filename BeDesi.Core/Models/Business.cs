@@ -18,6 +18,7 @@
         public int Points { get; set; }
         public int OwnerId { get; set; }
         public bool IsActive { get; set; }
+        public bool AgreeToShow { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public Business()

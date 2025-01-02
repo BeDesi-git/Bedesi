@@ -29,6 +29,7 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
       tap((res) => {
         localStorage.setItem('token', res.result.token);
+        localStorage.setItem('isBusinessOwner', res.result.userDetails.role == 'BusinessOwner'? 'Y' : 'N')
         this.setLoggedIn(true); 
       })
     );
@@ -85,6 +86,14 @@ export class AuthService {
       return payload.username || 'User';
     }
     return '';
+  }
+
+  isUserBusinessOwner(): boolean {
+    const isBusinessOwner = localStorage.getItem('isBusinessOwner');
+    if (isBusinessOwner) {
+      return isBusinessOwner === 'Y';
+    }
+    return false;
   }
 
   // Perform logout

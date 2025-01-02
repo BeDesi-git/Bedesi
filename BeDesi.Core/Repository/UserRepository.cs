@@ -86,7 +86,7 @@ namespace BeDesi.Core.Repository
                                 PasswordHash = reader.GetString(3),  
                                 Salt = reader.GetString(4),          
                                 Role = reader.GetString(5) ,
-                                ContactNumber = reader.GetString(6)
+                                ContactNumber = ReadDbNullStringSafely(reader, 6)
                             };
 
                             return user; // Return the User object
@@ -184,7 +184,8 @@ namespace BeDesi.Core.Repository
                         name = @name,
                         contact_number = @contactNumber,
                         password_hash = CASE WHEN @passwordHash IS NOT NULL THEN @passwordHash ELSE password_hash END,
-                        salt = CASE WHEN @salt IS NOT NULL THEN @salt ELSE salt END
+                        salt = CASE WHEN @salt IS NOT NULL THEN @salt ELSE salt END,
+                        role = @role
                     WHERE 
                         email = @email";
 
@@ -202,6 +203,7 @@ namespace BeDesi.Core.Repository
                     command.Parameters.AddWithValue("@contactNumber", user.ContactNumber ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@passwordHash", user.PasswordHash ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@salt", user.Salt ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@role", user.Role ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@email", user.Email ?? (object)DBNull.Value);
 
                     // Execute the query and check rows affected

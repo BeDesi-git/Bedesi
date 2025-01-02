@@ -5,6 +5,7 @@
         public string Email { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+        public bool IsBusinessOwner { get; set; }
     }
 
     public class UpdateProfileRequest : RequestId
@@ -13,6 +14,7 @@
         public string Name { get; set; }
         public string ContactNumber { get; set; }
         public string Password { get; set; }
+        public bool IsBusinessOwner { get; set; }
     }
 
     public class GetProfileRequest : RequestId

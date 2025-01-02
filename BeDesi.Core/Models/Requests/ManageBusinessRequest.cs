@@ -11,4 +11,9 @@
     {
         public string Token { get; set; }
     }
+
+    public class CheckBusinessNameRequest : RequestId
+    {
+        public string BusinessName { get; set; }
+    }
 }
