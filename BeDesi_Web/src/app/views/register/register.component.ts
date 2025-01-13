@@ -13,7 +13,7 @@ export class RegisterComponent {
   email = '';
   password = '';
   confirmPassword = '';
-  isBusinessOwner = '';
+  isBusinessOwner: boolean = false;
 
   constructor(private authService: AuthService,
     private router: Router,
@@ -29,14 +29,33 @@ export class RegisterComponent {
       return;
     }
 
+    let data = {
+      name: this.name,
+      email: this.email,
+      password: this.password,
+      isBusinessOwner: this.isBusinessOwner,
+      isAutoRegister: false
+    }
     this.authService
-      .register({ name: this.name, email: this.email, password: this.password, IsBusinessOwner: this.isBusinessOwner })
+      .register(data)
       .subscribe({
         next: (res) => {
-          console.log('User: ' + this.name +' registered!', res);
-          this.router.navigate(['/business']);
+          if (res.hasError) {
+            this.snackBar.open(res.errorMessage, 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+          }
+          else { 
+            console.log('User: ' + this.name + ' registered!', res);
+            this.router.navigate(['/business']);
+          }
         },
-        error: (err) => console.error(err),
+        error: (err) => {
+          console.error(err);
+          
+        },
       });
   }
 

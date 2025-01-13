@@ -23,7 +23,7 @@ export class UpdateProfileComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.authService.isLoggedIn().subscribe({
+    this.authService.isLoggedInStream().subscribe({
       next: (isLoggedIn) => {
         if (!isLoggedIn) {
           this.router.navigate(['/login']); // Redirect to login page if not logged in

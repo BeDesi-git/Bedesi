@@ -21,29 +21,29 @@ namespace BeDesiAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ApiResponse<bool>> Register([FromBody] RegisterRequest param)
+        public async Task<ApiResponse<int>> Register([FromBody] RegisterRequest param)
         {
             try
             {
                 string rid = "[NO-RID]";
                 if (param == null || string.IsNullOrWhiteSpace(param.RID))
                 {
-                    return ResponseFactory.CreateFailedResponse<bool>(ErrorCode.ParameterMissing, "Server is expecting RID in every request");
+                    return ResponseFactory.CreateFailedResponse<int>(ErrorCode.ParameterMissing, "Server is expecting RID in every request");
                 }
                 if (param == null)
                 {
-                    return ResponseFactory.CreateFailedResponse<bool>(ErrorCode.ParameterMissing, "Server is expecting {param} of type Register Request");
+                    return ResponseFactory.CreateFailedResponse<int>(ErrorCode.ParameterMissing, "Server is expecting {param} of type Register Request");
                 }
                 rid = param.RID;
                 var response = await _service.RegisterUser(param);
                 response.RID = rid;
-                return ResponseFactory.CreateResponse(response.Result);
+                return response; 
             }
             catch (Exception ex)
             {
                 string userDisplayErrorMessage = ex.Message + " There was an issue reported. Please reach out us at 1800-5623-645. Request ID:" + "";
                 log.Error(param.Email + ":" + ex.Message, ex);
-                return ResponseFactory.CreateFailedResponse<bool>(ErrorCode.UnhandledError, userDisplayErrorMessage);
+                return ResponseFactory.CreateFailedResponse<int>(ErrorCode.UnhandledError, userDisplayErrorMessage);
             }
 
         }

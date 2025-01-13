@@ -64,10 +64,10 @@
                   [(ngModel)]="business.description"
                   name="description"
                   rows="4"
-                  maxlength="2000"
+                  maxlength="500"
                   placeholder="Describe the services, history, and specialties of your business."
                   required></textarea>
-        <mat-hint align="end">{{ business.description?.length || 0 }}/2000</mat-hint>
+        <mat-hint align="end">{{ business.description?.length || 0 }}/500</mat-hint>
       </mat-form-field>
 
       <!-- Contact Number -->
@@ -138,17 +138,17 @@
                type="text"
                [(ngModel)]="business.instaHandle"
                name="instaHandle"
-               placeholder="Enter Instagram URL with https" />
+               placeholder="Enter Instagram Handle" />
       </mat-form-field>
 
       <!-- Facebook Page -->
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Facebook Page</mat-label>
+        <mat-label>Facebook Handle</mat-label>
         <input matInput
                type="text"
                [(ngModel)]="business.facebook"
                name="facebook"
-               placeholder="Enter Facebook URL with https" />
+               placeholder="Enter Facebook Handle" />
       </mat-form-field>
 
       <!-- I Agree Checkbox -->
@@ -160,7 +160,7 @@
     <mat-card-actions>
       <!-- Manage Business Button -->
       <button mat-raised-button color="accent" type="submit" class="full-width"
-              [disabled]="manageBusinessForm.invalid">
+              [disabled]="manageBusinessForm.invalid || this.isUpdateDisabled()">
         {{ business.businessId ? 'Update Business' : 'Add Business' }}
       </button>
     </mat-card-actions>

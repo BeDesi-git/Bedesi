@@ -21,6 +21,9 @@ export class BusinessListComponent {
 
   // Method to search and filter businesses based on 'text'
   searchBusiness(searchText: string) {
+    if (searchText == '' || this.selectedLocation == '') {
+      return;
+    }
     this.businessService.searchBusinesses(searchText, this.selectedLocation).subscribe({
       next: (data: any) => {
         if (data && data.result) {
@@ -32,6 +35,14 @@ export class BusinessListComponent {
             }
             else{
               business.imageUrl = 'assets/images/thumbnails/default.png';
+            }
+
+            if (business.instaHandle) {
+              business.instaHandle = 'https://www.instagram.com/' + business.instaHandle;
+            }
+
+            if (business.facebook) {
+              business.facebook = 'https://www.facebook.com/' + business.facebook;
             }
           });
           this.businessList = filteredBusinesses;

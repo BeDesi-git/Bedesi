@@ -45,7 +45,7 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/reset-password`, data);
   }
 
-  isLoggedIn(): Observable<boolean> {
+  isLoggedInStream(): Observable<boolean> {
     const token = localStorage.getItem('token');
     const isValid = this.validateToken(token);
     if (!isValid) {
@@ -53,6 +53,12 @@ export class AuthService {
     }
     this.loggedIn.next(isValid);
     return this.loggedIn.asObservable();
+  }
+
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    const isValid = this.validateToken(token);
+    return isValid;
   }
 
   // Validate the token

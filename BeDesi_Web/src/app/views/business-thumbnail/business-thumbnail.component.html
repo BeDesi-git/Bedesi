@@ -1,34 +1,48 @@
-<!--<div [routerLink]="['/business', localbusiness.id]" class="well hoverwell thumbnail">-->
-<div class="well hoverwell thumbnail">
-  <h2>{{localbusiness.name}}</h2>
-  <div class="row">
-    <div class="col-md-2">
-      <img [src]="localbusiness.imageUrl" [alt]="localbusiness.name" class="business-image">
-    </div>
-    <div class="col-md-5">
-      <div>{{localbusiness.description}}</div>
-      <div>{{localbusiness.contactNumber}}</div>
-      <div >
-        <span *ngIf="localbusiness.website" >
-          <button class="btn btn-social" (click)="openLink(localbusiness.website)">Website</button>
-        </span>
-        <span  *ngIf="localbusiness.instaHandle" >
-          <button class="btn btn-social" (click)="openLink(localbusiness.instaHandle)">Insta</button>
-        </span>
-        <span  *ngIf="localbusiness.facebook" >
-          <button class="btn btn-social" (click)="openLink(localbusiness.facebook)">Facebook</button>
-        </span>
-      </div>
-</div>
+<mat-card class="business-card">
+  <div class="card-header">
+    <img [src]="localbusiness.imageUrl" alt="Logo" class="logo" />
+    <h2>{{ localbusiness.name }}</h2>
   </div>
-</div>
-<!-- 
-Logo Image
-Name
-Details
-contact Number
-website
-insta
-FB
-Postcode
-review -->
+  <p>{{ localbusiness.description }}</p>
+
+  <div class="card-actions">
+
+    <!-- Contact Number -->
+    <div>
+      <a mat-button href="#" (click)="showContactNumber = !showContactNumber; $event.preventDefault()">
+        <fa-icon [icon]="faPhone" class="icon phone-icon"></fa-icon>
+      </a>
+      <span *ngIf="showContactNumber">
+        <a [href]="'tel:' + localbusiness.contactNumber">{{ localbusiness.contactNumber }}</a>
+      </span>
+    </div>
+
+    <!-- Email -->
+    <div *ngIf="localbusiness.email">
+      <a mat-button href="#" (click)="showEmail = !showEmail; $event.preventDefault()">
+        <fa-icon [icon]="faEnvelope" class="icon email-icon"></fa-icon>
+      </a>
+      <span *ngIf="showEmail">
+        <a [href]="'mailto:' + localbusiness.email">{{ localbusiness.email }}</a>
+      </span>
+    </div>
+
+  </div>
+  <div class="card-actions">
+    <!-- Website -->
+    <a mat-button *ngIf="localbusiness.website" [href]="localbusiness.website" target="_blank" rel="noopener noreferrer">
+      <fa-icon [icon]="faWebsite" class="website-icon"></fa-icon>
+    </a>
+
+    <!-- Instagram -->
+    <a mat-button *ngIf="localbusiness.instaHandle" [href]="localbusiness.instaHandle" target="_blank" rel="noopener noreferrer">
+      <fa-icon [icon]="faInstagram" class="instagram-icon"></fa-icon>
+    </a>
+
+    <!-- Facebook -->
+    <a mat-button *ngIf="localbusiness.facebook" [href]="localbusiness.facebook" target="_blank" rel="noopener noreferrer">
+      <fa-icon [icon]="faFacebook" class="facebook-icon"></fa-icon>
+    </a>
+  </div>
+
+</mat-card>

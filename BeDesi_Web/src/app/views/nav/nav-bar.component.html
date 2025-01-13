@@ -17,9 +17,15 @@
       <a mat-button [routerLink]="['/business']" class="navbar-link">Search</a>
     </ng-container>
 
-    <!-- Sign Up Link (Visible when not logged in) -->
+    <!-- Menu for Not Logged-In Users -->
     <ng-container *ngIf="!isLoggedIn; else userMenu">
-      <a mat-button [routerLink]="['/login']" class="navbar-link">Sign In</a>
+      <button mat-button [matMenuTriggerFor]="guestMenu" class="navbar-link">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #guestMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/login']">Sign In</button>
+        <button mat-menu-item [routerLink]="['/manage-business']">Add a Business</button>
+      </mat-menu>
     </ng-container>
 
     <!-- Dropdown Menu for Logged-In User -->

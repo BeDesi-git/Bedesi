@@ -4,6 +4,7 @@ using BeDesi.Core.Repository.Contracts;
 using BeDesi.Core.Services.Contracts;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 
 namespace BeDesi.Core.Services
@@ -11,15 +12,17 @@ namespace BeDesi.Core.Services
     public class ManageBusinessService : IManageBusinessService
     {
         private IBusinessRepository _repository;
+        private IAuthService _authService;
 
-        public ManageBusinessService(IBusinessRepository repository)
+        public ManageBusinessService(IBusinessRepository repository, IAuthService authService)
         {
             _repository = repository;
+            _authService = authService;
         }
         public async Task<ApiResponse<int>> AddBusiness(ManageBusinessRequest request)
         {
-            var userId = GetOwnerIdFromToken(request.Token);
-
+            var userId = request.Token == "" ? int.Parse(request.UserId) : GetOwnerIdFromToken(request.Token);
+            
             var points = GetBusinessPoints(5, request.Business);
 
             var newBusiness = MapBusinessDetails(request);
@@ -94,6 +97,7 @@ namespace BeDesi.Core.Services
                 HasLogo = request.Business.HasLogo,
                 ServesPostcodes = request.Business.ServesPostcodes,
                 Keywords = request.Business.Keywords,
+                AgreeToShow = request.Business.AgreeToShow,
                 IsActive = true,
             };
             return business;

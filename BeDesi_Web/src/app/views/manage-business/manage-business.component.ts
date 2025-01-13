@@ -27,27 +27,12 @@ export class ManageBusinessComponent implements OnInit {
   constructor(private manageBusinessService: ManageBusinessService,
     private authService: AuthService,
     private postcodeService: PostcodeService,
-    private router: Router,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef) { }
 
 
   ngOnInit() {
-    this.authService.isLoggedIn().subscribe({
-      next: (isLoggedIn) => {
-        if (!isLoggedIn) {
-          this.router.navigate(['/login']); // Redirect to login page if not logged in
-          return;
-        }
-
-        // Load user details
-        this.loadUserBusiness();
-      },
-      error: (err) => {
-        console.error('Error checking login status', err);
-        this.router.navigate(['/login']); // Redirect on error as well
-      }
-    });
+    this.loadUserBusiness();
   }
 
   private loadUserBusiness() {
@@ -99,12 +84,33 @@ export class ManageBusinessComponent implements OnInit {
   }
 
   addBusiness(): void {
-    this.manageBusinessService.addBusiness(this.business).subscribe(
+    if (this.authService.isLoggedIn()) {
+      this.sendAddBusinessRequest('');
+    }
+    else {
+      //Auto register user
+      let data = {
+        name: this.business.name,
+        email: this.business.email,
+        password: '',
+        isBusinessOwner: true,
+        isAutoRegister: true
+      }
+      this.authService.register(data).subscribe(
+        response => {
+          this.sendAddBusinessRequest(response.result.toString());
+        }
+      )
+    }
+  }
+
+  sendAddBusinessRequest(userId: string) {
+    this.manageBusinessService.addBusiness(this.business, userId).subscribe(
       response => {
         console.log('Business added successfully:', response);
 
         this.business.businessId = response.result;
-        this.snackBar.open('Your business is in queued, Visible within 24 hours post-verification!', 'Close', {
+        this.snackBar.open('Business added successfully', 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -119,14 +125,14 @@ export class ManageBusinessComponent implements OnInit {
   updateBusiness(): void {
     this.manageBusinessService.updateBusiness(this.business).subscribe(
       response => {
-        console.log('Business updated successfully:', response);
-
-        this.business.businessId = response.result;
-        this.snackBar.open('Business details saved successfully', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-        });
+        if (response.result) {
+          console.log('Business updated successfully:', response);
+          this.snackBar.open('Business details saved successfully', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+        }
       },
       error => {
         console.error('Error adding business:', error);
@@ -165,6 +171,10 @@ export class ManageBusinessComponent implements OnInit {
         this.isBusinessNameTaken = false;
       }
     });
+  }
+
+  isUpdateDisabled(): boolean {
+    return this.business.businessId != 0 && !this.authService.isLoggedIn();
   }
 
   onSubmit(form: NgForm): void {

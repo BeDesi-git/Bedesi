@@ -16,22 +16,30 @@ namespace BeDesi.Core.Services
     {
         private IUserRepository _repository;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthService(IUserRepository repository, IConfiguration configuration)
+        public AuthService(IUserRepository repository, IConfiguration configuration, IEmailService emailService)
         {
             _repository = repository;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
-        public async Task<ApiResponse<bool>> RegisterUser(RegisterRequest request)
+        public async Task<ApiResponse<int>> RegisterUser(RegisterRequest request)
         {
+            var response = await _repository.GetUserByEmail(request.Email);
+            if (response != null)
+                return ResponseFactory.CreateFailedResponse<int>(ErrorCode.UserMessage, "User when same email already exists.");
+
+            var password = request.IsAutoRegister ? GenerateRandomPassword() : request.Password;
+            var name = request.IsAutoRegister ? request.Name + " Owner" : request.Name;
             var Salt = GenerateSalt();
             var user = new User
             {
                 Email = request.Email,
-                Name = request.Name,
+                Name = name,
                 Salt = Salt,
-                PasswordHash = HashPassword(request.Password, Salt),
+                PasswordHash = HashPassword(password, Salt),
                 Role = request.IsBusinessOwner ? "BusinessOwner" : "User",
                 CreatedAt = DateTime.UtcNow,
                 isActive = true
@@ -39,8 +47,15 @@ namespace BeDesi.Core.Services
             
 
             // Save User to Database
-            var userRegistered = await _repository.Register(user);
-            return ResponseFactory.CreateResponse(userRegistered);
+            var userId = await _repository.Register(user);
+
+            // Send email with username password
+            if (request.IsAutoRegister)
+            {
+                await _emailService.SendWelcomeEmailAsync(user.Name, request.Name, user.Email, password);
+            }
+
+            return ResponseFactory.CreateResponse(userId);
         }
 
         public async Task<ApiResponse<AuthenticatedUser>> AuthenticateUser(LoginRequest request)
@@ -116,6 +131,7 @@ namespace BeDesi.Core.Services
                 return ResponseFactory.CreateFailedResponse<bool>(ErrorCode.UserMessage, "Invalid or expired token");
             }
         }
+
         public async Task<ApiResponse<User>> GetUserProfile(GetProfileRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -218,6 +234,20 @@ namespace BeDesi.Core.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        private string GenerateRandomPassword()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            char[] password = new char[8];
+
+            for (int i = 0; i < password.Length; i++)
+            {
+                password[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(password);
         }
 
     }

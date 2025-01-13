@@ -49,8 +49,8 @@ namespace BeDesi.Core.Repository
                                 Postcode = ReadDbNullStringSafely(reader, 3),
                                 Description = ReadDbNullStringSafely(reader, 4),  // Assuming description is third
                                 ContactNumber = ReadDbNullStringSafely(reader, 5),
-                                Website = ReadDbNullStringSafely(reader, 6),
-                                Email = ReadDbNullStringSafely(reader,7),
+                                Email = ReadDbNullStringSafely(reader, 6),
+                                Website = ReadDbNullStringSafely(reader, 7),
                                 InstaHandle = ReadDbNullStringSafely(reader, 8),
                                 Facebook = ReadDbNullStringSafely(reader, 9),
                                 HasLogo = ReadDbNullBoolSafely(reader, 10)

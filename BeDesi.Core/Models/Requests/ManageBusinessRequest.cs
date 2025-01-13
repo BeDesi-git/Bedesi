@@ -3,6 +3,7 @@
     public class ManageBusinessRequest : RequestId
     {
         public string Token { get; set; }
+        public string UserId { get; set; }
         public Business Business { get; set; }
 
     }

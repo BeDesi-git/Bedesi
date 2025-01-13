@@ -31,6 +31,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -68,7 +70,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatOptionModule,
     MatAutocompleteModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatGridListModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

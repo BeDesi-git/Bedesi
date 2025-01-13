@@ -12,10 +12,12 @@ export class ManageBusinessService {
 
   constructor(private http: HttpClient) { }
 
-  addBusiness(business: Business): Observable<any> {
+  addBusiness(business: Business, userId: string): Observable<any> {
+    var userToken = localStorage.getItem('token')
     const addBusinessRequest = {
       rid: 'AddBusinessRequest',
-      token: localStorage.getItem('token'),
+      token: userToken ? userToken : "",
+      userId : userId,
       business: business
     };
     return this.http.post<any>(`${this.apiUrl}/AddBusiness`, addBusinessRequest);

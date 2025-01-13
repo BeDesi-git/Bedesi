@@ -15,41 +15,37 @@ namespace BeDesi.Core.Repository
             _connectionString = configuration["ConnectionStrings:BeDesiDB"];
         }
 
-        public async Task<bool> Register(User user)
+        public async Task<int> Register(User user)
         {
-            // SQL query for inserting data into the bds_business table
+            // SQL query for inserting data into the bds_user table
             string query = @"
-                            INSERT INTO bds_user
-                            (email, name, password_hash, salt, role, is_active) 
-                            VALUES 
-                            (@email, @name, @passwordHash, @salt, @role, @isActive)";
+                    INSERT INTO bds_user
+                    (email, name, password_hash, salt, role, is_active) 
+                    OUTPUT INSERTED.user_id
+                    VALUES 
+                    (@Email, @Name, @PasswordHash, @Salt, @Role, @IsActive)";
 
-
-            // Using SqlConnection to connect to the database
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                // Open the connection
                 await connection.OpenAsync();
 
-                // Create a SqlCommand with the query and the connection
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     // Add parameters with their values
-                    command.Parameters.AddWithValue("@email", user.Email ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@name", user.Name ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@passwordHash", user.PasswordHash ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@salt", user.Salt ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@role", user.Role ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@isActive", user.isActive);
-                    
-                    // Execute the query and check rows affected
-                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    command.Parameters.AddWithValue("@Email", user.Email ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Name", user.Name ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@PasswordHash", user.PasswordHash ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Salt", user.Salt ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Role", user.Role ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@IsActive", user.isActive);
 
-                    // Return true if at least one row was inserted
-                    return rowsAffected > 0;
+                    // Execute the query and return the inserted user_id
+                    int userId = (int)await command.ExecuteScalarAsync();
+                    return userId;
                 }
             }
         }
+
 
         public async Task<User> GetUserByEmail(string email)
         {

@@ -1,0 +1,92 @@
+
+.business-card {
+  margin: 1rem;
+  padding: 1rem;
+  background-color: #D0CFCA;
+  color: black;
+  border-radius: 8px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 1rem;
+  border-radius: 50%;
+}
+
+.card-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+button {
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+
+/* Default icon styles */
+fa-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  transition: transform 0.2s, color 0.2s ease;
+}
+
+.phone-icon {
+  color: green; /* Specific color for phone */
+}
+
+.email-icon {
+  color: blue; /* Specific color for email */
+}
+/* Brand-specific colors */
+.website-icon {
+  color: #007bff; /* Blue for Website */
+}
+
+.instagram-icon {
+  color: #C13584; /* Instagram brand color */
+}
+
+.facebook-icon {
+  color: #4267B2; /* Facebook brand color */
+}
+
+/* Add hover effect */
+a:hover .website-icon {
+  color: #0056b3;
+}
+
+a:hover .instagram-icon {
+  color: #a82d72;
+}
+
+a:hover .facebook-icon {
+  color: #365899;
+}
+
+a:hover fa-icon {
+  transform: scale(1.2); /* Slight zoom on hover */
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.contact-info button {
+  margin-right: 10px;
+}
+.contact-info span {
+  font-size: 14px;
+  color: #555;
+}
+
