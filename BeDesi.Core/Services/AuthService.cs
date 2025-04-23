@@ -31,7 +31,11 @@ namespace BeDesi.Core.Services
             if (response != null)
                 return ResponseFactory.CreateFailedResponse<int>(ErrorCode.UserMessage, "User when same email already exists.");
 
-            var password = request.IsAutoRegister ? GenerateRandomPassword() : request.Password;
+            var password = GenerateRandomPassword();
+
+            //for testing
+            //Console.WriteLine(request.Email + ": " + password);
+
             var name = request.IsAutoRegister ? request.Name + " Owner" : request.Name;
             var Salt = GenerateSalt();
             var user = new User
@@ -49,10 +53,16 @@ namespace BeDesi.Core.Services
             // Save User to Database
             var userId = await _repository.Register(user);
 
-            // Send email with username password
+            
             if (request.IsAutoRegister)
-            {
+            { 
+                // Send email for Business User
                 await _emailService.SendWelcomeEmailAsync(user.Name, request.Name, user.Email, password);
+            }
+            else
+            {
+                // Send email for User 
+                await _emailService.SendWelcomeEmailAsync(user.Name, user.Email, password);
             }
 
             return ResponseFactory.CreateResponse(userId);

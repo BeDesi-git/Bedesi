@@ -21,7 +21,11 @@ namespace BeDesi.Core.Services
         }
         public async Task<ApiResponse<int>> AddBusiness(ManageBusinessRequest request)
         {
-            var userId = request.Token == "" ? int.Parse(request.UserId) : GetOwnerIdFromToken(request.Token);
+            var userId = 0;
+            if (request.Token != "")
+            {
+                userId = GetOwnerIdFromToken(request.Token);
+            }
             
             var points = GetBusinessPoints(5, request.Business);
 
@@ -98,6 +102,7 @@ namespace BeDesi.Core.Services
                 ServesPostcodes = request.Business.ServesPostcodes,
                 Keywords = request.Business.Keywords,
                 AgreeToShow = request.Business.AgreeToShow,
+                IsOnline = request.Business.IsOnline,
                 IsActive = true,
             };
             return business;

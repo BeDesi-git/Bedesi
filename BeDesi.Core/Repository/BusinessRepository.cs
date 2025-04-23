@@ -17,10 +17,27 @@ namespace BeDesi.Core.Repository
         {
             var businesses = new List<Business>();
 
+            // Convert the keywords string into an array (comma or space-separated)
+            var keywordsArray = param.Keywords?.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string keywordConditions = string.Empty;
+
+            if (keywordsArray != null && keywordsArray.Length > 0)
+            { 
+                keywordConditions = string.Join(" OR ", keywordsArray.Select((k, i) => $"keywords LIKE @keyword{i}"));
+            }
+            else
+            {
+                keywordConditions = "1=1"; 
+            }
+
             // SQL query with parameters
-            string query = "SELECT business_id, name, address, postcode, description, contact_number, email, website, insta_handle, facebook, has_logo, is_active " +
-                           "FROM bds_business " +
-                           "WHERE is_active = 'Y' and  keywords LIKE @keywords AND (serves_postcode LIKE @postcode OR serves_postcode LIKE '%online%')";
+            string query = $@"
+            SELECT business_id, name, address, postcode, description, contact_number, email, website, insta_handle, facebook, has_logo, is_online, is_active
+            FROM bds_business
+            WHERE is_active = 'Y' 
+              AND ({keywordConditions}) 
+              AND (serves_postcode LIKE @postcode OR is_online = 'Y')";
 
             // Using SqlConnection to connect to the database
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -31,8 +48,16 @@ namespace BeDesi.Core.Repository
                 // Create a SqlCommand with the query and the connection
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    // Add parameters with wildcards in C#
-                    command.Parameters.AddWithValue("@keywords", "%" + param.Keywords + "%");
+                    // Add parameters for each keyword if they exist
+                    if (keywordsArray != null && keywordsArray.Length > 0)
+                    {
+                        for (int i = 0; i < keywordsArray.Length; i++)
+                        {
+                            command.Parameters.AddWithValue($"@keyword{i}", "%" + keywordsArray[i] + "%");
+                        }
+                    }
+
+                    // Add the postcode parameter
                     command.Parameters.AddWithValue("@postcode", "%" + param.Location + "%");
 
                     // Execute the query and retrieve the results using SqlDataReader
@@ -53,7 +78,8 @@ namespace BeDesi.Core.Repository
                                 Website = ReadDbNullStringSafely(reader, 7),
                                 InstaHandle = ReadDbNullStringSafely(reader, 8),
                                 Facebook = ReadDbNullStringSafely(reader, 9),
-                                HasLogo = ReadDbNullBoolSafely(reader, 10)
+                                HasLogo = ReadDbNullBoolSafely(reader, 10),
+                                IsOnline = ReadDbNullBoolSafely(reader, 11)
                             };
 
                             businesses.Add(business); // Add to the list
@@ -62,7 +88,7 @@ namespace BeDesi.Core.Repository
                 }
             }
 
-            return businesses;  // Return the list of businesses
+            return businesses; // Return the list of businesses
         }
 
         public async Task<int> AddBusiness(Business newBusiness)
@@ -71,12 +97,12 @@ namespace BeDesi.Core.Repository
         INSERT INTO bds_business
             (name, address, postcode, description, contact_number, email, website,
              insta_handle, facebook, has_logo, serves_postcode, keywords, 
-             points, owner_id, is_active, agree_to_show, created_at) 
+             points, owner_id, is_active, agree_to_show, is_online, created_at) 
         OUTPUT INSERTED.business_id
         VALUES
             (@name, @address, @postcode, @description, @contact_number, @email,
              @website, @insta_handle, @facebook, @has_logo, @serves_postcode, 
-             @keywords, @points, @owner_id, @is_active, @agree_to_show, @created_at)";
+             @keywords, @points, @owner_id, @is_active, @agree_to_show, @is_online, @created_at)";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -100,6 +126,7 @@ namespace BeDesi.Core.Repository
                     command.Parameters.AddWithValue("@owner_id", newBusiness.OwnerId);
                     command.Parameters.AddWithValue("@is_active", newBusiness.IsActive ? "Y" : "N");
                     command.Parameters.AddWithValue("@agree_to_show", newBusiness.AgreeToShow ? "Y" : "N");
+                    command.Parameters.AddWithValue("@is_online", newBusiness.IsOnline ? "Y" : "N");
                     command.Parameters.AddWithValue("@created_at", newBusiness.CreatedAt);
 
                     // Execute the query and get the returned ID
@@ -126,7 +153,8 @@ namespace BeDesi.Core.Repository
                                 serves_postcode = @serves_postcode,
                                 keywords = @keywords,
                                 points = @points,
-                                is_active = @is_active
+                                is_active = @is_active,
+                                is_online = @is_online
                             WHERE 
                                 business_id = @business_id";
 
@@ -150,6 +178,7 @@ namespace BeDesi.Core.Repository
                     command.Parameters.AddWithValue("@keywords", string.Join(";", updateBusiness.Keywords) ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@points", updateBusiness.Points);
                     command.Parameters.AddWithValue("@is_active", updateBusiness.IsActive ? "Y" : "N");
+                    command.Parameters.AddWithValue("@is_online", updateBusiness.IsOnline ? "Y" : "N");
                     command.Parameters.AddWithValue("@business_id", updateBusiness.BusinessId);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
@@ -163,7 +192,7 @@ namespace BeDesi.Core.Repository
             SELECT 
                 business_id, name, address, postcode, description, contact_number, email,
                 website, insta_handle, facebook, has_logo, serves_postcode, keywords, 
-                points, owner_id, is_active, agree_to_show, created_at
+                points, owner_id, is_active, agree_to_show, is_online, created_at
             FROM bds_business
             WHERE owner_id = @owner_id";
 
@@ -199,7 +228,8 @@ namespace BeDesi.Core.Repository
                                 Points = reader.GetInt32(13),
                                 OwnerId = reader.GetInt32(14),
                                 IsActive = reader.GetString(15) == "Y" ? true : false,
-                                AgreeToShow = reader.GetString(16) == "Y" ? true : false//,
+                                AgreeToShow = reader.GetString(16) == "Y" ? true : false,
+                                IsOnline = reader.GetString(17) == "Y" ? true : false,//,
                                 //CreatedAt = DateTime.Parse(reader.GetString(17))
                             });
                         }

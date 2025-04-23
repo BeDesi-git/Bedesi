@@ -44,6 +44,22 @@ namespace BeDesi.Core.Services
             return ResponseFactory.CreateResponse(response);
         }
 
+        public async Task<ApiResponse<List<string>>> GetAllOutcodes()
+        {
+            List<string> response = null;
+
+            //Get from Databsse
+            var result = await _repository.GetOutcodeListAsync("");
+            response = result.ToList();
+
+            if (response == null)
+            {
+                ResponseFactory.CreateFailedResponse<string>(ErrorCode.UserMessage, "No Outcode found");
+            }
+
+            return ResponseFactory.CreateResponse(response);
+        }
+
         public string GetPostcodeFromRegion(string region)
         {
            return _repository.GetPostcodeFromRegion(region);
