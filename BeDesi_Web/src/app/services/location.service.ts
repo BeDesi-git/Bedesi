@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -9,7 +9,12 @@ import { environment } from '../../environments/environment';
 })
 export class LocationService {
   private apiUrl = environment.apiBaseUrl + '/Location';
-
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Custom-Header': 'CustomHeaderValue',
+      'Content-Type': 'application/json'
+    })
+  };
   constructor(private http: HttpClient) {}
 
   getLocationSuggestions(startsWith: string): Observable<any> {
@@ -18,7 +23,7 @@ export class LocationService {
       let params = new HttpParams()
         .set('startswith', startsWith.trim())
         .set('rid', rid);
-      return this.http.get(this.apiUrl, { params });
+      return this.http.get(this.apiUrl, { params, ...this.httpOptions });
     }
     return EMPTY;
   }
@@ -27,6 +32,13 @@ export class LocationService {
     let rid = 'AllAreaRequest';
     let params = new HttpParams()
       .set('rid', rid);
-    return this.http.get(this.apiUrl + '/GetAllLocations', { params });
+    return this.http.get(this.apiUrl + '/GetAllLocations', { params, ...this.httpOptions });
+  }
+
+  getAllOutcodes(): Observable<any> {
+    let rid = 'AllOutcodesRequest';
+    let params = new HttpParams()
+      .set('rid', rid);
+    return this.http.get(this.apiUrl + '/GetAllOutcodes', { params, ...this.httpOptions });
   }
 }

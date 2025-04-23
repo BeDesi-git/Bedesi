@@ -20,19 +20,18 @@ export class RegisterComponent {
     private snackBar: MatSnackBar) { }
 
   onSubmit() {
-    if (this.password !== this.confirmPassword) {
-      this.snackBar.open('Password do not match', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-      });
-      return;
-    }
+    //if (this.password !== this.confirmPassword) {
+    //  this.snackBar.open('Password do not match', 'Close', {
+    //    duration: 3000,
+    //    horizontalPosition: 'center',
+    //    verticalPosition: 'bottom',
+    //  });
+    //  return;
+    //}
 
     let data = {
       name: this.name,
       email: this.email,
-      password: this.password,
       isBusinessOwner: this.isBusinessOwner,
       isAutoRegister: false
     }
@@ -49,7 +48,12 @@ export class RegisterComponent {
           }
           else { 
             console.log('User: ' + this.name + ' registered!', res);
-            this.router.navigate(['/business']);
+            this.snackBar.open("Please log in using the credentials sent to your registered email.", 'Close', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+            this.router.navigate(['/login']);
           }
         },
         error: (err) => {
@@ -57,10 +61,5 @@ export class RegisterComponent {
           
         },
       });
-  }
-
-  // Navigate to the login page
-  navigateToLogin() {
-    this.router.navigate(['/login']);
   }
 }

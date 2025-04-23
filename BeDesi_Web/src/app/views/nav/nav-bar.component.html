@@ -1,7 +1,12 @@
 <mat-toolbar color="primary" class="navbar">
   <!-- Navbar Brand with Text -->
-  <a [routerLink]="['/business']" class="navbar-brand">
+  <!--<a [routerLink]="['/business']" class="navbar-brand">
     <span class="mat-toolbar-title">BeDesi</span>
+  </a>-->
+
+  <!-- Navbar Brand with Logo -->
+  <a [routerLink]="['/business']" class="navbar-brand">
+    <img src="../../../assets/BeDesi_Logo.png" alt="BeDesi Logo" class="navbar-logo" />
   </a>
 
 
@@ -20,7 +25,7 @@
     <!-- Menu for Not Logged-In Users -->
     <ng-container *ngIf="!isLoggedIn; else userMenu">
       <button mat-button [matMenuTriggerFor]="guestMenu" class="navbar-link">
-        <mat-icon>menu</mat-icon>
+        <mat-icon class="menu-button">menu</mat-icon>
       </button>
       <mat-menu #guestMenu="matMenu">
         <button mat-menu-item [routerLink]="['/login']">Sign In</button>

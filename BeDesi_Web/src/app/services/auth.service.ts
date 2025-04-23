@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { tap } from 'rxjs/operators';
@@ -12,6 +12,12 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   loggedInStatus$ = this.loggedIn.asObservable();
 
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Custom-Header': 'CustomHeaderValue',
+      'Content-Type': 'application/json'
+    })
+  };
   constructor(private http: HttpClient) { }
 
    setLoggedIn(status: boolean): void {
@@ -21,12 +27,12 @@ export class AuthService {
 
   register(data: any): Observable<any> {
     data.rid = 'RegisterRequest';
-    return this.http.post<any>(`${this.apiUrl}/register`, data);
+    return this.http.post<any>(`${this.apiUrl}/register`, data, this.httpOptions);
   }
 
   login(data: any): Observable<any> {
     data.rid = 'LoginRequest';
-    return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login`, data, this.httpOptions).pipe(
       tap((res) => {
         localStorage.setItem('token', res.result.token);
         localStorage.setItem('isBusinessOwner', res.result.userDetails.role == 'BusinessOwner'? 'Y' : 'N')
@@ -37,12 +43,12 @@ export class AuthService {
 
   forgotPassword(data: any): Observable<any> {
     data.rid = 'ForgotPasswordRequest';
-    return this.http.post(`${this.apiUrl}/forgot-password`, data);
+    return this.http.post(`${this.apiUrl}/forgot-password`, data, this.httpOptions);
   }
 
   resetPassword(data: any): Observable<any> {
     data.rid = 'ResetPasswordRequest';
-    return this.http.post(`${this.apiUrl}/reset-password`, data);
+    return this.http.post(`${this.apiUrl}/reset-password`, data, this.httpOptions);
   }
 
   isLoggedInStream(): Observable<boolean> {

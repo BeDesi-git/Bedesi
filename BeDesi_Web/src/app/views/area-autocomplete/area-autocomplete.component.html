@@ -1,6 +1,6 @@
 <form class="autocomplete-form">
   <mat-form-field class="autocomplete-full-width">
-    <mat-label>Postcode/Region</mat-label>
+    <mat-label class="autocomplete-label">Postcode/Region</mat-label>
     <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onOptionSelected($event)">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">

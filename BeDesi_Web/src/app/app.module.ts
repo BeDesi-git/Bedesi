@@ -9,6 +9,7 @@ import { BusinessThumbnailComponent } from './views/business-thumbnail/business-
 import { BusinessDetailsComponent } from './views/business-details/business-details.component';
 import { appRoutes } from './route';
 import { NavBarComponent } from './views/nav/nav-bar.component';
+import { FooterBarComponent } from './views/footer/footer-bar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { AreaAutocomplete } from './views/area-autocomplete/area-autocomplete.component';
+import { OutcodeAutocomplete } from './views/outcode-autocomplete/outcode-autocomplete.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { ForgotPasswordComponent } from './views/forgot-password/forgot-password.component';
@@ -45,6 +47,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BusinessThumbnailComponent,
     BusinessDetailsComponent,
     NavBarComponent,
+    FooterBarComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
     UpdateProfileComponent,
@@ -57,6 +60,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     FormsModule,
     ReactiveFormsModule,
     AreaAutocomplete,
+    OutcodeAutocomplete,
     BrowserAnimationsModule, // Required for Material animations
     MatInputModule,
     MatFormFieldModule,

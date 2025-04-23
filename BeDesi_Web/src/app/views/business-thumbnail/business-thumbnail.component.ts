@@ -17,7 +17,10 @@ export class BusinessThumbnailComponent{
 
   showContactNumber = false;
   showEmail = false;
-
+  showContactCard = false;
+  ngOnInit() {
+    this.showContactCard = this.localbusiness.contactNumber || this.localbusiness.email;
+  }
   openLink(url: string): void {
     window.open(url, '_blank', 'noopener noreferrer');
   }

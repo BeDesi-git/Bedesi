@@ -17,6 +17,7 @@
   color: #742f2f;
   font-size: 2.5rem; /* Slightly larger text for branding */
   font-weight: bold;
+  margin-left: -10px;
 }
 
 /* Spacer to push items to the right */
@@ -37,4 +38,15 @@
 
 .user-menu-btn {
   color: black;
+}
+
+.menu-button {
+  font-size: 2.125rem !important;
+  height: 2.125rem !important;
+  width: 2.125rem !important;
+}
+.navbar-logo {
+  height: 40px; /* Adjust as needed */
+  width: auto;
+  display: block;
 }

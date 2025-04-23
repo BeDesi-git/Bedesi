@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -12,6 +12,12 @@ export class BusinessService {
   private closeAutocompleteSubject = new Subject<void>();
   closeAutocomplete$ = this.closeAutocompleteSubject.asObservable();
 
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Custom-Header': 'CustomHeaderValue',
+      'Content-Type': 'application/json'
+    })
+  };
   constructor(private http: HttpClient) { }
 
   searchBusinesses(keywords: string, location: string): Observable<any> {
@@ -20,15 +26,15 @@ export class BusinessService {
                 .set('keywords', keywords)
                 .set('location', location)
                 .set('rid', rid);
-    return this.http.get(this.apiUrl, { params });
+    return this.http.get(this.apiUrl, { params, ...this.httpOptions });
   }
 
   getBusinessDetails(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.apiUrl}/${id}`, this.httpOptions);
   }
 
   rateBusiness(id: number, rating: number, feedback: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${id}/rate`, { rating, feedback });
+    return this.http.post(`${this.apiUrl}/${id}/rate`, { rating, feedback, ...this.httpOptions });
   }
 
   closeAutocomplete() {

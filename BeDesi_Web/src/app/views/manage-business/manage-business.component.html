@@ -1,7 +1,7 @@
 <form (ngSubmit)="onSubmit(manageBusinessForm)" class="manage-business-form" #manageBusinessForm="ngForm">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Manage a Business</mat-card-title>
+      <mat-card-title>{{ business.businessId ? 'Manage Business' : 'Add Business' }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <!-- Business Name -->
@@ -14,48 +14,31 @@
                placeholder="Enter business name"
                (blur)="checkBusinessName()"
                #businessName="ngModel"
-               required
-               [disabled]="business.businessId !== 0" />
-      </mat-form-field>
-
-      <!-- Address -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Address</mat-label>
-        <input matInput
-               type="text"
-               [(ngModel)]="business.address"
-               name="address"
-               placeholder="Enter business address"
                required />
       </mat-form-field>
 
-      <!-- Postcode -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Postcode</mat-label>
-        <input matInput
-               type="text"
-               [(ngModel)]="business.postcode"
-               name="postcode"
-               placeholder="Enter business postcode"
-               [required]="businessArea.radius !== 100"
-               pattern="[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}"
-               #postcode="ngModel"
-               (blur)="getServesPostcodes()" />
-        <mat-error *ngIf="postcode.invalid && postcode.touched">
-          Enter a valid UK postcode.
-        </mat-error>
-      </mat-form-field>
+      <!-- Is Online Checkbox -->
+      <mat-checkbox style="margin-top:-15px;" [(ngModel)]="business.isOnline" (ngModelChange)="moveToOnline()" name="isOnline">
+        Operates across the UK
+      </mat-checkbox>
 
-      <!-- Radius Dropdown -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Service Radius</mat-label>
-        <mat-select [(ngModel)]="businessArea.radius" name="radius" (ngModelChange)="getServesPostcodes()">
-          <mat-option [value]="5">5 miles</mat-option>
-          <mat-option [value]="10">10 miles</mat-option>
-          <mat-option [value]="15">15 miles</mat-option>
-          <mat-option [value]="100">Online</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <!-- Postcode Autocomplete -->
+      <ng-container *ngIf="!business.isOnline">
+        <outcode-autocomplete [value]="business.postcode"  (optionSelected)='onOutcodeSelected($event)'></outcode-autocomplete>
+
+
+        <!-- Radius Dropdown -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Service Radius</mat-label>
+          <mat-select [(ngModel)]="businessArea.radius" name="radius" (ngModelChange)="getServesPostcodes()">
+            <mat-option [value]="0">This area</mat-option>
+            <mat-option [value]="5">5 miles</mat-option>
+            <mat-option [value]="10">10 miles</mat-option>
+            <mat-option [value]="15">15 miles</mat-option>
+            <mat-option [value]="20">20 miles</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
 
       <!-- Description -->
       <mat-form-field appearance="outline" class="full-width">
@@ -78,8 +61,7 @@
                [(ngModel)]="business.contactNumber"
                name="contactNumber"
                placeholder="Enter business contact number"
-               required
-               pattern="^\+?[0-9\s\-()]{7,15}$"
+               pattern="^\+?[0-9\s\-()]{7,15}$" 
                #contactNumber="ngModel" />
         <mat-error *ngIf="contactNumber.invalid && contactNumber.touched">
           Enter a valid phone number.
@@ -103,12 +85,13 @@
 
       <!-- Products and Services -->
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Products & Services</mat-label>
+        <mat-label>Keywords</mat-label>
         <input matInput
                [(ngModel)]="productInput"
                name="productsInput"
                (keydown.enter)="addProduct(productInput, $event)"
-               placeholder="Add products or services" />
+               (focusout)="addProduct(productInput, $event)"
+               [placeholder]="business.keywords.length > 0 ? 'Add more keywords' : 'Add Business keywords'" />
       </mat-form-field>
 
       <!-- Display selected products and services -->
@@ -158,9 +141,8 @@
 
     </mat-card-content>
     <mat-card-actions>
-      <!-- Manage Business Button -->
       <button mat-raised-button color="accent" type="submit" class="full-width"
-              [disabled]="manageBusinessForm.invalid || this.isUpdateDisabled()">
+              [disabled]="manageBusinessForm.invalid">
         {{ business.businessId ? 'Update Business' : 'Add Business' }}
       </button>
     </mat-card-actions>

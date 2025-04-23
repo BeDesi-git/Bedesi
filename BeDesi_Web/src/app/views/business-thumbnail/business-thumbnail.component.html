@@ -5,10 +5,10 @@
   </div>
   <p>{{ localbusiness.description }}</p>
 
-  <div class="card-actions">
+  <div class="card-actions" *ngIf="showContactCard" >
 
     <!-- Contact Number -->
-    <div>
+    <div *ngIf="localbusiness.contactNumber">
       <a mat-button href="#" (click)="showContactNumber = !showContactNumber; $event.preventDefault()">
         <fa-icon [icon]="faPhone" class="icon phone-icon"></fa-icon>
       </a>

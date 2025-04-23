@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { BusinessService } from 'src/app/services/business.service';
 import { Business } from 'src/app/model/business-model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'business-list',
@@ -10,7 +11,8 @@ import { Business } from 'src/app/model/business-model';
 export class BusinessListComponent {
   businessList: any;
   selectedLocation: string = '';
-  constructor(private businessService: BusinessService) {
+  constructor(private businessService: BusinessService,
+    private snackBar: MatSnackBar,) {
   }
 
   // Handle postcode selection from autocomplete
@@ -21,13 +23,18 @@ export class BusinessListComponent {
 
   // Method to search and filter businesses based on 'text'
   searchBusiness(searchText: string) {
-    if (searchText == '' || this.selectedLocation == '') {
-      return;
-    }
     this.businessService.searchBusinesses(searchText, this.selectedLocation).subscribe({
       next: (data: any) => {
         if (data && data.result) {
           let filteredBusinesses = data.result;
+
+          if (filteredBusinesses.length == 0) {
+            this.snackBar.open("No businesses found matching your search criteria.", 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+          }
 
           filteredBusinesses.forEach((business: Business) => {
             if(business.hasLogo){
@@ -35,6 +42,10 @@ export class BusinessListComponent {
             }
             else{
               business.imageUrl = 'assets/images/thumbnails/default.png';
+            }
+
+            if (business.website) {
+              business.website = 'https://' + business.website;
             }
 
             if (business.instaHandle) {

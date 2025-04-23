@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -9,6 +9,12 @@ import { Observable } from 'rxjs';
 export class UserProfileService {
   private apiUrl = environment.apiBaseUrl + '/Profile';
 
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Custom-Header': 'CustomHeaderValue',
+      'Content-Type': 'application/json'
+    })
+  };
   constructor(private http: HttpClient) { }
 
 
@@ -20,11 +26,11 @@ export class UserProfileService {
       .set('rid', rid)
       .set('token', token);
     
-    return this.http.get(this.apiUrl + '/GetUserProfile', { params });
+    return this.http.get(this.apiUrl + '/GetUserProfile', { params, ...this.httpOptions });
   }
 
   updateUserProfile(updatedProfile: any) {
     updatedProfile.rid = 'UpdateProfile';
-    return this.http.put(this.apiUrl + '/UpdateProfile', updatedProfile);
+    return this.http.put(this.apiUrl + '/UpdateProfile', updatedProfile, this.httpOptions);
   }
 }

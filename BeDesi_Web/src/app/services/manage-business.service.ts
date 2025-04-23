@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Business } from '../model/business-model';
 import { environment } from '../../environments/environment';
@@ -10,17 +10,22 @@ import { environment } from '../../environments/environment';
 export class ManageBusinessService {
   private apiUrl = environment.apiBaseUrl + '/ManageBusiness';
 
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Custom-Header': 'CustomHeaderValue',
+      'Content-Type': 'application/json'
+    })
+  };
   constructor(private http: HttpClient) { }
 
-  addBusiness(business: Business, userId: string): Observable<any> {
+  addBusiness(business: Business): Observable<any> {
     var userToken = localStorage.getItem('token')
     const addBusinessRequest = {
       rid: 'AddBusinessRequest',
       token: userToken ? userToken : "",
-      userId : userId,
       business: business
     };
-    return this.http.post<any>(`${this.apiUrl}/AddBusiness`, addBusinessRequest);
+    return this.http.post<any>(`${this.apiUrl}/AddBusiness`, addBusinessRequest, this.httpOptions);
   }
 
   updateBusiness(business: Business): Observable<any> {
@@ -29,7 +34,7 @@ export class ManageBusinessService {
       token: localStorage.getItem('token'),
       business: business
     };
-    return this.http.post<any>(`${this.apiUrl}/UpdateBusiness`, updateBusinessRequest);
+    return this.http.post<any>(`${this.apiUrl}/UpdateBusiness`, updateBusinessRequest, this.httpOptions);
   }
 
   getUserBusiness(): Observable<any> {
@@ -39,7 +44,8 @@ export class ManageBusinessService {
       .set('rid', rid)
       .set('token', token);
 
-    return this.http.get(this.apiUrl + '/GetUserBusiness', { params });
+    
+    return this.http.get(this.apiUrl + '/GetUserBusiness', { params, ...this.httpOptions });
   }
 
   checkBusinessName(businessName: string): Observable<any> {
@@ -47,6 +53,6 @@ export class ManageBusinessService {
       .set('rid', 'CheckBusinessNameRequest')
       .set('businessName', businessName);    
 
-    return this.http.get(`${this.apiUrl}/CheckBusinessName`, { params });
+    return this.http.get(`${this.apiUrl}/CheckBusinessName`, { params, ...this.httpOptions });
   }
 }

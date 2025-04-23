@@ -6,7 +6,7 @@ export class Business {
     postcode: string = '';
     description?: string;
     contactNumber: string = '';
-    email?: string;
+    email?: string = '';
     website?: string = '';
     imageUrl?: string = '';
     instaHandle?: string = '';
@@ -17,6 +17,7 @@ export class Business {
     isActive: boolean = false;
     ratings?: number = 0;
     agreeToShow: boolean = false;
+    isOnline: boolean = false;
 };
 
 

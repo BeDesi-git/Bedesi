@@ -1,0 +1,24 @@
+/* footer  container styles */
+.footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  padding: 0 16px;
+  background-color: #d0cfca; /* Cream color */
+  color: black; /* Text color for better contrast */
+}
+
+
+/* Spacer to push items to the right */
+.spacer {
+  flex: 1 1 auto;
+}
+
+
+.footer-link {
+  color: black;
+  margin-left: 16px;
+}
+
+
