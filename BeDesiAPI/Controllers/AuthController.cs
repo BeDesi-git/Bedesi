@@ -100,7 +100,7 @@ namespace BeDesiAPI.Controllers
                     return ResponseFactory.CreateFailedResponse<bool>(ErrorCode.UnhandledError, "User not found");
 
                 var token = response.Result;
-                var resetLink = $"{Request.Scheme}://{Request.Host}/reset-password?token={token}";
+                var resetLink = $"https://www.bedesi.co.uk/reset-password?token={token}";
 
                 var emailBody = $"<p>Click <a href='{resetLink}'>here</a> to reset your Bedesi.co.uk password.</p>";
 
